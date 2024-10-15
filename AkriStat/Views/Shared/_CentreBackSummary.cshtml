@@ -1,0 +1,117 @@
+﻿@model AkriStat.ViewModels.Player.Summary.SummaryCentreBackVM
+
+<figure class="highcharts-figure">
+    <div id="centreBackRadarChart"></div>
+</figure>
+
+<script>
+    Highcharts.chart('centreBackRadarChart', {
+
+        chart: {
+            credits: false,
+            polar: true,
+            type: 'area',
+            marginTop: 85
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        title: {
+            text: 'Season Summary @Model.Season'
+        },
+
+        pane: {
+            size: '100%'
+        },
+
+        xAxis: {
+            categories: ['Clrances /90', 'Blocks /90', 'Succ Press /90', 'Intercept /90',
+                         'Tckls Won /90', 'Dribblers Tackled %', 'Aerial Won %', 'Passes Cmp %'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0,
+            max: 100
+        },
+
+        plotOptions: {
+            column: {
+                pointPadding: 0,
+                groupPadding: 0
+            },
+            series: {
+                lineWidth: 1,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.actual}'
+                }
+            }
+        },
+
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG'
+                    ]
+                }
+            }
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:#000000">Percentile: <b>{point.y}</b><br/> <span style="color:#000000">Actual: <b>{point.actual}</b>'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        series: [{
+            name: '@Html.DisplayFor(x => x.Season)',
+            data: [
+                    { y: @Html.DisplayFor(x => x.ClearancesPer90Percentile), actual: @Html.DisplayFor(x => x.ClearancesPer90) },
+                    { y: @Html.DisplayFor(x => x.BlocksPer90Percentile), actual: @Html.DisplayFor(x => x.BlocksPer90) },
+                    { y: @Html.DisplayFor(x => x.SuccessfulPressuresPer90Percentile), actual: @Html.DisplayFor(x => x.SuccessfulPressuresPer90) },
+                    { y: @Html.DisplayFor(x => x.InterceptionsPer90Percentile),  actual: @Html.DisplayFor(x => x.InterceptionsPer90) },
+                    { y: @Html.DisplayFor(x => x.TacklesWonPer90Percentile),  actual: @Html.DisplayFor(x => x.TacklesWonPer90) },
+                    { y: @Html.DisplayFor(x => x.DribblersTackledPercentagePercentile),  actual: @Html.DisplayFor(x => x.DribblersTackledPercentage) },
+                    { y: @Html.DisplayFor(x => x.AerialDualsWonPercentagePercentile),  actual: @Html.DisplayFor(x => x.AerialDualsWonPercentage) },
+                    { y: @Html.DisplayFor(x => x.PassesCompletedPercentagePercentile), actual: @Html.DisplayFor(x => x.PassesCompletedPercentage) }
+                  ],
+            pointPlacement: 'on',
+            color: '#D13913',
+            opacity: 0.85
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        layout: 'horizontal'
+                    },
+                    pane: {
+                        size: '80%'
+                    }
+                }
+            }]
+        }
+
+    });
+</script>

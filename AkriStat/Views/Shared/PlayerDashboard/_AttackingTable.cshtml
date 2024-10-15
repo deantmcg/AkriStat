@@ -1,0 +1,36 @@
+﻿@model List<AkriStat.ViewModels.Player.Dashboard.PlayerAttackingVM>
+
+<table class="table table-sm table-hover table-dt-default" id="tblAttacking">
+    <thead>
+        <tr>
+            <th width="20%">Player</th>
+            <th>Goals</th>
+            <th>Goals /90</th>
+            <th>Non-pen xG</th>
+            <th>Non-pen xG /90</th>
+            <th>Goals /Shot</th>
+            <th>Shots /90</th>
+            <th>Chances Crtd</th>
+            <th>Chances Crtd /90</th>
+            <th>Touches Box /90</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            @*<tr onclick="window.location.href = '/Players/@player.ID'" style="cursor:pointer">*@
+            <tr onclick="window.open('/Players/@player.ID', '_blank')" style="cursor:pointer">
+                <td>@Html.DisplayFor(x => player.Name)</td>
+                <td>@Html.DisplayFor(x => player.Goals)</td>
+                <td>@Html.DisplayFor(x => player.GoalsPer90)</td>
+                <td>@Html.DisplayFor(x => player.NonPenaltyXG)</td>
+                <td>@Html.DisplayFor(x => player.NonPenaltyXGPer90)</td>
+                <td>@Html.DisplayFor(x => player.GoalsPerShot)</td>
+                <td>@Html.DisplayFor(x => player.ShotsPer90)</td>
+                <td>@Html.DisplayFor(x => player.ChancesCreated)</td>
+                <td>@Html.DisplayFor(x => player.ChancesCreatedPer90)</td>
+                <td>@Html.DisplayFor(x => player.TouchesAttackingPenaltyAreaPer90)</td>
+            </tr>
+        }
+    </tbody>
+</table>

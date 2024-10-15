@@ -1,0 +1,50 @@
+﻿<div class="row" style="padding:0.5rem">
+    <div class="col-12">
+        <h1 style="text-align:center"><b>Scraper</b></h1>
+    </div>
+    <div class="col-lg-4 col-6">
+        <a asp-action="New">
+            <div class="small-box bg-info">
+                <div class="inner" style="text-align:center">
+                    <h3>New</h3>
+                    <p>Scrape Match Logs for new and existing players</p>
+                    <div class="icon">
+                        <i class="fas fa-folder-plus" style="position:inherit"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-4 col-6">
+        <a asp-action="BatchIndex">
+            <div class="small-box bg-purple">
+                <div class="inner" style="text-align:center">
+                    <h3>Batches</h3>
+                    <p>Batches of scrape jobs already created</p>
+                    <div class="icon">
+                        <i class="fas fa-tasks" style="position:inherit"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-4 col-6">
+        <a asp-action="ImportIndex">
+            <div class="small-box bg-success">
+                <div class="inner" style="text-align:center">
+                    <h3>Imports</h3>
+                    <p>Output Match Log csv files from successful batch jobs</p>
+                    <div class="icon">
+                        <i class="fas fa-file-csv" style="position:inherit"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<style>
+    .small-box:hover {
+        filter: brightness(90%);
+    }
+</style>

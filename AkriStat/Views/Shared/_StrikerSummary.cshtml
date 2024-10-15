@@ -1,0 +1,118 @@
+﻿@model AkriStat.ViewModels.Player.Summary.SummaryStrikerVM
+
+<figure class="highcharts-figure">
+    <div id="strikerRadarChart"></div>
+</figure>
+
+<script>
+    Highcharts.chart('strikerRadarChart', {
+
+        chart: {
+            credits: false,
+            polar: true,
+            type: 'area',
+            marginTop: 85
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        title: {
+            text: 'Season Summary @Model.Season'
+        },
+
+        pane: {
+            size: '100%'
+        },
+
+        xAxis: {
+            categories: ['Chances Crtd /90', 'Touches Box /90', 'Shots oT /90', 'Succ Dribbles /90',
+                         'Succ Dribble %', 'Non Pen xG /Shot', 'Non Pen xG /90', 'xA /90', 'Goals'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0,
+            max: 100
+        },
+
+        plotOptions: {
+            column: {
+                pointPadding: 0,
+                groupPadding: 0
+            },
+            series: {
+                lineWidth: 1,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.actual}'
+                }
+            }
+        },
+
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG'
+                    ]
+                }
+            }
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:#000000">Percentile: <b>{point.y}</b><br/> <span style="color:#000000">Actual: <b>{point.actual}</b>'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        series: [{
+            name: '@Html.DisplayFor(x => x.Season)',
+            data: [
+                    { y: @Html.DisplayFor(x => x.ChancesCreatedPer90Percentile), actual: @Html.DisplayFor(x => x.ChancesCreatedPer90) },
+                    { y: @Html.DisplayFor(x => x.TouchesAttackingPenaltyAreaPer90Percentile), actual: @Html.DisplayFor(x => x.TouchesAttackingPenaltyAreaPer90) },
+                    { y: @Html.DisplayFor(x => x.ShotsOnTargetPer90Percentile), actual: @Html.DisplayFor(x => x.ShotsOnTargetPer90) },
+                    { y: @Html.DisplayFor(x => x.SuccessfulDribblesPer90Percentile),  actual: @Html.DisplayFor(x => x.SuccessfulDribblesPer90) },
+                    { y: @Html.DisplayFor(x => x.SuccessfulDribblesPercentagePercentile),  actual: '@Html.DisplayFor(x => x.SuccessfulDribblesPercentage)%' },
+                    { y: @Html.DisplayFor(x => x.NonPenaltyXgperShotPercentile),  actual: @Html.DisplayFor(x => x.NonPenaltyXgperShot) },
+                    { y: @Html.DisplayFor(x => x.NonPenaltyXgper90Percentile), actual: @Html.DisplayFor(x => x.NonPenaltyXgper90) },
+                    { y: @Html.DisplayFor(x => x.XgassistedPer90Percentile), actual: @Html.DisplayFor(x => x.XgassistedPer90) },
+                    { y: @Html.DisplayFor(x => x.GoalsPercentile), actual: @Html.DisplayFor(x => x.Goals) }
+                  ],
+            pointPlacement: 'on',
+            color: '#1A6EFF',
+            opacity: 0.85
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        layout: 'horizontal'
+                    },
+                    pane: {
+                        size: '80%'
+                    }
+                }
+            }]
+        }
+
+    });
+</script>

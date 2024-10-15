@@ -1,0 +1,83 @@
+﻿@model List<AkriStat.ViewModels.Search.StandardSearchResultVM>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-sm table-hover" id="similarPlayersTable" style="text-align:center; vertical-align:text-top">
+            <thead>
+                <tr style="display:none">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var player in Model)
+                {
+                    <tr onclick="window.location.href = '/Players/@player.ID'" style="cursor: pointer;">
+                        @{ string facePicture = $"/dist/img/player_faces/{player.ID}.jpeg"; }
+                        <td style="width: 5%">
+                            <img style="width:2em; border-radius: 50%; display: inline;" src="@player.NationalityFlagUrl.Replace("3x2", "1x1")">
+                        </td>
+                        <td style="width: 10%;">
+                            @if (new List<string>() { "GK" }.Contains(player.Position))
+                            {
+                                <a class="badge bg-keeper">@player.Position</a>
+                            }
+                            else if (new List<string>() { "RB", "LB", "WB" }.Contains(player.Position))
+                            {
+                                <a class="badge bg-full-back">@player.Position</a>
+                            }
+                            else if (new List<string>() { "CB" }.Contains(player.Position))
+                            {
+                                <a class="badge bg-centre-back">@player.Position</a>
+                            }
+                            else if (new List<string>() { "DM", "CM" }.Contains(player.Position))
+                            {
+                                <a class="badge bg-centre-mid">@player.Position</a>
+                            }
+                            else if (new List<string>() { "AM", "LW", "RW", "RM", "LM" }.Contains(player.Position))
+                            {
+                                <a class="badge bg-am-winger">@player.Position</a>
+                            }
+                            else if (new List<string>() { "FW" }.Contains(player.Position))
+                            {
+                                <a class="badge bg-forward">@player.Position</a>
+                            }
+                        </td>
+                        <td>
+                            @player.Name
+                        </td>
+                        <td style="width: 1%">
+                            <img style="max-height:3.5em; border-radius:20%; border: solid; border-color: #fff" alt="Avatar" class="table-avatar" src="@facePicture"
+                                 onerror="this.onerror=null; this.src='/dist/img/player_faces/default.jpeg'" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    #similarPlayersTable > tbody > tr > td {
+        vertical-align: middle;
+    }
+
+    .badge {
+        font-size: 1em;
+    }
+</style>
+
+<script>
+    $('#similarPlayersTable').DataTable({
+        scrollX: true,
+        lengthChange: false,
+        searching: false,
+        ordering: false,
+        info: false,
+        autoWidth: true,
+        responsive: false,
+        pageLength: 6
+    });
+</script>

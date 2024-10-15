@@ -1,0 +1,172 @@
+﻿@model AkriStat.ViewModels.Player.Summary.BarsVM
+
+<div class="progress-group">
+    <span class="progress-text">Aerial Duals Won</span>
+    <span class="float-right"><b>@Model.AerialDualsWon</b>/@Model.AerialDuals</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-centre-mid" role="progressbar" style="width: @Model.AerialDualsWonPercentage%" aria-valuenow="@Model.AerialDualsWon" aria-valuemin="0" aria-valuemax="@Model.AerialDuals"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Tackles Won</span>
+    <span class="float-right"><b>@Model.TacklesWon</b>/@Model.PlayersTackled</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-centre-mid" role="progressbar" style="width: @Model.TacklesWonPercentage%" aria-valuenow="@Model.TacklesWon" aria-valuemin="0" aria-valuemax="@Model.PlayersTackled"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Successful Dribbles</span>
+    <span class="float-right"><b>@Model.SuccessfulDribbles</b>/@Model.DribblesAttempted</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-centre-mid" role="progressbar" style="width: @Model.SuccessfulDribblesPercentage%" aria-valuenow="@Model.SuccessfulDribbles" aria-valuemin="0" aria-valuemax="@Model.DribblesAttempted"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Passing Success</span>
+    <span class="float-right"><b>@Model.PassesCompleted</b>/@Model.PassesAttempted</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-centre-mid" role="progressbar" style="width: @Model.PassesCompletedPercentage%" aria-valuenow="@Model.PassesCompleted" aria-valuemin="0" aria-valuemax="@Model.PassesAttempted"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Long Balls Success</span>
+    <span class="float-right"><b>@Model.LongPassesCompleted</b>/@Model.LongPassesAttempted</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-centre-mid" role="progressbar" style="width: @Model.LongPassesCompletedPercentage%" aria-valuenow="@Model.LongPassesCompleted" aria-valuemin="0" aria-valuemax="@Model.LongPassesAttempted"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Progressive Passes</span>
+    <span class="float-right"><b>@Model.ProgressivePasses</b>/@Model.PassesAttempted</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-centre-mid" role="progressbar" style="width: @Model.ProgressivePassesPercentage%" aria-valuenow="@Model.ProgressivePasses" aria-valuemin="0" aria-valuemax="@Model.PassesAttempted"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Dribblers Tackled</span>
+    <span class="float-right"><b>@Model.DribblersTackled</b>/@Model.DribblesContested</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-centre-mid" role="progressbar" style="width: @Model.DribblersTackledPercentage%" aria-valuenow="@Model.DribblersTackled" aria-valuemin="0" aria-valuemax="@Model.DribblesContested"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6" style="text-align:center">
+        <h5>Passing Range</h5>
+        <div id="passLengthPie"></div>
+    </div>
+    <div class="col-6" style="text-align:center">
+        <h5>Shot Creating Actions</h5>
+        <div id="shotCreatingActionsPie"></div>
+    </div>
+</div>
+
+<script>
+    Highcharts.chart('passLengthPie', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            height: 200,
+            margin: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            pointFormat: '<b>{point.y}</b> - {point.percentage:.0f}%'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                    format: '<b>{point.name}</b>'
+                }
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [{
+                name: '5-15 yards',
+                y: @Model.ShortPassesCompleted
+            }, {
+                name: '15-30 yards',
+                y: @Model.MediumPassesCompleted
+            }, {
+                name: '30+ yards',
+                y: @Model.LongPassesCompleted
+            }]
+        }],
+        exporting: {
+            enabled: false
+        }
+    });
+
+    Highcharts.chart('shotCreatingActionsPie', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            height: 200,
+            margin: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            pointFormat: '<b>{point.y}</b> - {point.percentage:.0f}%'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                    format: '<b>{point.name}</b>'
+                }
+            }
+        },
+        series: [{
+            colorByPoint: true,
+            data: [{
+                name: 'Passes (Live Ball)',
+                y: @Model.PassesCompletedLiveBallLeadingToShot
+            }, {
+                name: 'Passes (Dead Ball)',
+                y: @Model.PassesCompletedDeadBallLeadingToShot
+            }, {
+                    name: 'Dribbles',
+                y: @Model.DribblesLeadingToShot
+            }, {
+                    name: 'Shots',
+                y: @Model.ShotsLeadingToAnotherShot
+            }, {
+                    name: 'Fouls Drawn',
+                y: @Model.FoulsDrawnLeadingToShot
+            }]
+        }],
+        exporting: {
+            enabled: false
+        }
+    });
+</script>

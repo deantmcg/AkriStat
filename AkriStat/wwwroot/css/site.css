@@ -1,0 +1,290 @@
+﻿a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+.form-center {
+    width: 70vw;
+    margin: 0 auto
+}
+
+.index-center {
+    width: 90vw;
+    margin: 0 auto
+}
+
+@media (min-width: 576px) {
+    .dashboard-top-card {
+        min-height: 128px;
+    }
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+
+    .form-center {
+        width: 40vw;
+        margin: 0 auto
+    }
+
+    .form-center-lg {
+        width: 60vw;
+        margin: 0 auto
+    }
+
+    .index-center {
+        width: 70vw;
+        margin: 0 auto
+    }
+
+    .dashboard-top-card {
+        min-height: 168px;
+    }
+}
+
+@media (min-width: 900px) {
+    html {
+        font-size: 16px;
+    }
+
+    .form-center {
+        width: 30vw;
+        margin: 0 auto
+    }
+
+    .form-center-lg {
+        width: 60vw;
+        margin: 0 auto
+    }
+
+    .index-center {
+        width: 60vw;
+        margin: 0 auto
+    }
+}
+
+/*@media (min-width: 1000px) {
+    .form-center {
+        width: 20vw;
+        margin: 0 auto
+    }
+}*/
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+/* Goalkeeper Colour Formatting */
+.bg-keeper {
+    background-color: #8A2BE2 !important;
+    color: #ffffff !important;
+}
+
+/* Wing Back / Full Back Colour Formatting */
+.bg-full-back {
+    background-color: #E77E23 !important;
+    color: #ffffff !important;
+}
+
+/* Central Defender Colour Formatting */
+.bg-centre-back {
+    background-color: #D13913 !important;
+    color: #ffffff !important;
+}
+
+/* Central Midfielder Colour Formatting */
+.bg-centre-mid {
+    background-color: #ffc940 !important;
+    color: #262626 !important;
+}
+
+/* Atacking Mid and Winger Colour Formatting */
+.bg-am-winger {
+    background-color: #9BBF30 !important;
+    color: #ffffff !important;
+}
+
+/* Forward Colour Formatting */
+.bg-forward {
+    background-color: #1A6EFF !important;
+    color: #ffffff !important;
+}
+
+/* Team Card Text */
+.team-name {
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Team & Player Profile Display Page */
+.widget-profile .widget-profile-header {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    height: 135px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.widget-profile .widget-profile-username {
+    font-size: 25px;
+    font-weight: 300;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.widget-profile .widget-profile-desc {
+    margin-top: 0;
+}
+
+.widget-profile .widget-profile-image {
+    left: 50%;
+    margin-left: -45px;
+    position: absolute;
+    top: 80px;
+}
+
+    .widget-profile .widget-profile-image > img {
+        height: 100px;
+        /*width: 90px;*/
+    }
+
+.widget-profile .card-footer {
+    padding-top: 50px;
+}
+
+.widget-profile-2 .widget-profile-header {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    padding: 1rem;
+}
+
+.widget-profile-2 .widget-profile-username {
+    font-size: 25px;
+    font-weight: 300;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.widget-profile-2 .widget-profile-desc {
+    margin-top: 0;
+}
+
+.widget-profile-2 .widget-profile-username,
+.widget-profile-2 .widget-profile-desc {
+    margin-left: 75px;
+}
+
+.widget-profile-2 .widget-profile-image > img {
+    float: left;
+    height: auto;
+    width: 65px;
+}
+
+.back-link {
+    cursor: pointer;
+    color: #0366d6 !important;
+}
+
+    .back-link:hover {
+        filter: brightness(85%);
+    }
+
+.selectpicker-white {
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da !important;
+}
+
+.layout-footer-fixed .wrapper .content-wrapper {
+    padding-bottom: 0 !important;
+}
+
+/* Default DataTables style */
+.table-dt-default {
+    width: 100% !important;
+    border-bottom: 0 !important;
+    text-align: center;
+}
+
+    .table-dt-default > tbody > tr:nth-child(1) > td {
+        border-top: 0;
+    }
+
+    .table-dt-default > tbody > tr > td {
+        vertical-align: middle;
+    }
+
+    .table-dt-default > thead > tr > th {
+        border-top: 0;
+    }
+
+.round-bottom-edge {
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+.round-edge {
+    border-radius: .25rem;
+}

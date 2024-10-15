@@ -1,0 +1,34 @@
+﻿@model List<AkriStat.ViewModels.Player.Dashboard.PlayerPassingVM>
+
+<table class="table table-sm table-hover table-dt-default" id="tblPassing" style="width:100%">
+    <thead>
+        <tr>
+            <th width="20%">Player</th>
+            <th>Passes Attm. /90</th>
+            <th>Pass Compl. %</th>
+            <th>Prgrsive Pass /90</th>
+            <th>Assists /90</th>
+            <th>xA /90</th>
+            <th>Key Pass /90</th>
+            <th>Chances Crtd /90</th>
+            <th>Pass Received %</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            @*<tr onclick="window.location.href = '/Players/@player.ID'" style="cursor:pointer">*@
+            <tr onclick="window.open('/Players/@player.ID', '_blank')" style="cursor:pointer">
+                <td>@Html.DisplayFor(x => player.Name)</td>
+                <td>@Html.DisplayFor(x => player.PassesAttemptedPer90)</td>
+                <td>@Html.DisplayFor(x => player.PassesCompletedPercentage)</td>
+                <td>@Html.DisplayFor(x => player.ProgressivePassesPer90)</td>
+                <td>@Html.DisplayFor(x => player.AssistsPer90)</td>
+                <td>@Html.DisplayFor(x => player.XgAssistedPer90)</td>
+                <td>@Html.DisplayFor(x => player.KeyPassesPer90)</td>
+                <td>@Html.DisplayFor(x => player.ChancesCreatedPer90)</td>
+                <td>@Html.DisplayFor(x => player.PassesReceivedPercentage)</td>
+            </tr>
+        }
+    </tbody>
+</table>

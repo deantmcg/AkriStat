@@ -1,0 +1,35 @@
+﻿@model List<LeagueTableLines>
+
+<table id="leagueTable" class="table table-sm table-hover table-dt-default">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Team</th>
+            <th>Played</th>
+            <th>Won</th>
+            <th>Drawn</th>
+            <th>Lost</th>
+            <th title="Goal Difference">GD</th>
+            <th>Points</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int x = 1; }
+        @foreach (var item in Model)
+        {
+            <tr style="cursor:pointer" onclick="window.location.href = '/Teams/@item.TeamID'">
+                <td>@x</td>
+                <td></td>
+                <td>@item.Name</td>
+                <td>@item.GamesPlayed</td>
+                <td>@item.Wins</td>
+                <td>@item.Draws</td>
+                <td>@item.Losses</td>
+                <td>@item.GoalDifference</td>
+                <td>@item.Points</td>
+            </tr>
+            x++;
+        }
+    </tbody>
+</table>

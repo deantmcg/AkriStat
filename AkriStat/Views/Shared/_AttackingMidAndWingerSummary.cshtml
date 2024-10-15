@@ -1,0 +1,122 @@
+﻿@model AkriStat.ViewModels.Player.Summary.SummaryAttackingMidAndWingerVM
+
+<figure class="highcharts-figure">
+    <div id="attackingMidAndWingerRadarChart"></div>
+</figure>
+
+<script>
+    Highcharts.chart('attackingMidAndWingerRadarChart', {
+
+        chart: {
+            credits: false,
+            polar: true,
+            type: 'area',
+            marginTop: 85
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        title: {
+            text: 'Season Summary vs Top 5 Leagues Attacking Midfielders & Wingers'
+        },
+
+        //subtitle: {
+        //    text : 'Graph plots are percentile values. Data labels are actual values.'
+        //},
+
+        pane: {
+            size: '100%'
+        },
+
+        xAxis: {
+            categories: ['Chances Crtd /90', 'xA /90', 'xG /90', 'Crosses /90', 'Succ Dribbles /90',
+                         'Succ Dribble %', 'Pass Final 3rd /90', 'Pass Final 3rd /90', 'Yards Carried /90'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0,
+            max: 100
+        },
+
+        plotOptions: {
+            column: {
+                pointPadding: 0,
+                groupPadding: 0
+            },
+            series: {
+                lineWidth: 1,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.actual}'
+                }
+            }
+        },
+
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG'
+                    ]
+                }
+            }
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:#000000">Percentile: <b>{point.y}</b><br/> <span style="color:#000000">Actual: <b>{point.actual}</b>'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        series: [{
+            name: '@Html.DisplayFor(x => x.Season)',
+            data: [
+                    { y: @Html.DisplayFor(x => x.ChancesCreatedPer90Percentile), actual: @Html.DisplayFor(x => x.ChancesCreatedPer90) },
+                    { y: @Html.DisplayFor(x => x.XgassistedPer90Percentile), actual: @Html.DisplayFor(x => x.XgassistedPer90) },
+                    { y: @Html.DisplayFor(x => x.Xgper90Percentile), actual: @Html.DisplayFor(x => x.Xgper90) },
+                    { y: @Html.DisplayFor(x => x.CrossesPer90Percentile),  actual: @Html.DisplayFor(x => x.CrossesPer90) },
+                    { y: @Html.DisplayFor(x => x.SuccessfulDribblesPer90Percentile),  actual: @Html.DisplayFor(x => x.SuccessfulDribblesPer90) },
+                    { y: @Html.DisplayFor(x => x.SuccessfulDribblesPercentagePercentile),  actual: @Html.DisplayFor(x => x.SuccessfulDribblesPercentage) },
+                    { y: @Html.DisplayFor(x => x.PassesIntoFinalThirdPer90Percentile),  actual: @Html.DisplayFor(x => x.PassesIntoFinalThirdPer90) },
+                    { y: @Html.DisplayFor(x => x.YardsProgressiveCarriesPer90Percentile), actual: @Html.DisplayFor(x => x.YardsProgressiveCarriesPer90) },
+                    { y: @Html.DisplayFor(x => x.PassesCompletedPer90Percentile), actual: @Html.DisplayFor(x => x.PassesCompletedPer90) }
+                  ],
+            pointPlacement: 'on',
+            color: '#9BBF30',
+            opacity: 0.85
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        layout: 'horizontal'
+                    },
+                    pane: {
+                        size: '80%'
+                    }
+                }
+            }]
+        }
+
+    });
+</script>

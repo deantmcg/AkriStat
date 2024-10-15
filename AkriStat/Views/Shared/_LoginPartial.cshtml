@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using AkriStat.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item has-treeview">
+                <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                        @User.Identities.First().Claims.FirstOrDefault(x => x.Type.Equals("fullname")).Value
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        @*<a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">*@
+                        <a class="nav-link" asp-controller="Account" asp-action="Index">
+                            <i class="nav-icon fas fa-id-card"></i>
+                            <p>
+                                Manage
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="logout" class="nav-link" href="#" onclick="getElementById('logoutForm').submit();">
+                            <i class="nav-icon fas fa-sign-out-alt"></i>
+                            <p>
+                                Logout
+                            </p>
+                        </a>
+                        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"></form>
+                    </li>
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path">
+                    <i class="nav-icon fas fa-sign-in-alt"></i>
+                    <p>
+                        Login
+                    </p>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+<hr style="border-top:1px solid #c2c7d0" />

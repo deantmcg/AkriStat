@@ -1,0 +1,97 @@
+﻿@model AkriStat.ViewModels.Compare.ComparePlayerVM
+
+@{ ViewData["Title"] = "Compare Players"; }
+
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<div class="row">
+    <div class="col-12">
+        <h1 style="text-align:center"><b>Compare Players</b></h1>
+        @using (Html.BeginForm("PostCompare", "Compare"))
+        {
+            <div id="accordion">
+                <div class="card card-info">
+                    <div class="card-body">
+                        <div class="row">
+                            @for (int i = 0; i < 6; i++)
+                            {
+                                string count = (i + 1).ToString();
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="form-control-plaintext" style="text-align:center">Player @count</label>
+                                        <select name="ChosenPlayerSeasons[@i].ID" id="ChosenPlayerSeasons[@i].ID" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                                            <option selected></option>
+                                            @foreach (var option in Model.PlayerSelectList)
+                                            {
+                                                <option value="@option.Value">@option.Text</option>
+                                            }
+                                        </select>
+                                        <select name="ChosenPlayerSeasons[@i].Season" id="ChosenPlayerSeasons[@i].Season" class="selectpicker season form-control">
+                                        </select>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary float-right" type="submit">Search</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker(defaultSelectSettings);
+
+        $('.selectpicker.season').selectpicker('hide');
+        let comparePlayers = @Html.Raw(Json.Serialize(ViewBag.ComparePlayers));
+
+        $.each(comparePlayers, function (index) {
+            if (comparePlayers != null) {
+                let selector = 'select[name="ChosenPlayerSeasons[' + index + '].ID"]';
+                let select = $(selector);
+                select.selectpicker('val', comparePlayers[index]);
+                getPlayerSeasons(index, select.val());
+            }
+        });
+
+        $('select[id*=".ID"]').change(function () {
+            let index = $(this).attr('name').replace('ChosenPlayerSeasons[', '').replace('].ID', '');
+            let playerId = $(this).val();
+            getPlayerSeasons(index, playerId);
+        });
+
+        function getPlayerSeasons(index, _playerId) {
+            let seasonSelect = $('select[name="ChosenPlayerSeasons[' + index + '].Season"]');
+            seasonSelect.empty();
+            $.ajax({
+                type: "GET",
+                url: "/Compare/GetPlayerSeasons",
+                data: { playerId: _playerId },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        seasonSelect.append(`<option>${response[i]}</option>`);
+                    }
+                    seasonSelect.selectpicker('show');
+                    seasonSelect.selectpicker('refresh');
+                    var firstVal = $('select[name = "ChosenPlayerSeasons[' + index + '].Season"] option:first').val();
+                    seasonSelect.selectpicker('val', firstVal);
+                },
+                error: function (responese) {
+                    alert("Error. Contact site admin");
+                }
+            });
+        }
+    });
+</script>

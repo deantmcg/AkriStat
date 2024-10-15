@@ -1,0 +1,73 @@
+﻿@model List<AkriStat.ViewModels.Dashboard.TopPerformersVM>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table id="topPerformersTable" class="table table-sm table-hover table-dt-default">
+        <thead style="display:none">
+            <tr>
+                <th width="20%">Pos</th>
+                <th width="60%">Name</th>
+                <th width="20%">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    var prop = item.GetType().GetProperties().FirstOrDefault(x => x.Name.ToLower().Equals(ViewBag.Metric.ToLower()));
+
+                    if (ViewBag.Focus.Equals("player"))
+                    {
+                        string facePicture = $"/dist/img/player_faces/{item.ID}.jpeg";
+                        <tr onclick="window.location.href = '/Players/@item.ID'" style="cursor:pointer">
+                            <td>
+                                <img style="max-height:2em; border-radius:20%" src="@facePicture"
+                                     onerror="this.onerror=null; this.src='/dist/img/player_faces/default.jpeg'" />
+                            </td>
+                            <td>
+                                @item.Name
+                            </td>
+                            @if (prop.PropertyType.FullName.Contains("Int"))
+                            {
+                                <td>@prop.GetValue(item)</td>
+                            }
+                            else
+                            {
+                                <td>@String.Format("{0:0.00}", prop.GetValue(item))</td>
+                            }
+                        </tr>
+                    }
+                    else if (ViewBag.Focus.Equals("team"))
+                    {
+                        string teamCrest = $"/dist/img/club_crests/{item.ID}.svg";
+                        <tr onclick="window.location.href = '/Teams/@item.ID'" style="cursor:pointer">
+                            <td>
+                                <img style="max-height:2em" src=@teamCrest>
+                            </td>
+                            <td>
+                                @item.Name
+                            </td>
+                            @if (prop.PropertyType.FullName.Contains("Int"))
+                            {
+                                <td>@prop.GetValue(item)</td>
+                            }
+                            else
+                            {
+                                <td>@String.Format("{0:0.00}", prop.GetValue(item))</td>
+                            }
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="row">
+        <div class="col-12 text-black-50" style="text-align:center">
+            Players failed to load.
+        </div>
+    </div>
+}

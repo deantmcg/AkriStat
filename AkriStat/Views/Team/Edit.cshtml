@@ -1,0 +1,162 @@
+﻿@model AkriStat.ViewModels.Team.TeamEditVM
+
+@using (Html.BeginForm("Edit", "Team", FormMethod.Post, new { @class = "form-center-lg" }))
+{
+    <div class="row">
+        <div class="col-12">
+            <h1 style="text-align:center"><b>Edit Team</b></h1>
+        </div>
+        <input type="hidden" asp-for="ID" />
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Name, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(x => x.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.FullName, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(x => x.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.YearFounded, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(x => x.YearFounded, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "1600", @max = DateTime.Now.Year.ToString(), @step = "1" } })
+                @Html.ValidationMessageFor(model => model.YearFounded, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.StadiumName, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(x => x.StadiumName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StadiumName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Address, htmlAttributes: new { @class = "control-label" })
+                @Html.TextAreaFor(x => x.Address, new { @class = "form-control", @rows = 4 })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.FbRefID, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(x => x.FbRefID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FbRefID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.NationID, htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(x => x.NationID, Model.NationSelectList, new { @class = "selectpicker form-control", @data_live_search = "true" })
+                @Html.ValidationMessageFor(model => model.NationID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.TeamTypeID, htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownListFor(x => x.TeamTypeID, Model.TeamTypeSelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TeamTypeID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                @Html.LabelFor(x => x.ColourCode1, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(x => x.ColourCode1, new { htmlAttributes = new { @type = "color", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ColourCode1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                @Html.LabelFor(x => x.ColourCode2, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(x => x.ColourCode2, new { htmlAttributes = new { @type = "color", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ColourCode2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                @if (!String.IsNullOrEmpty(Model.ColourCode3))
+                {
+                    <a class="btn btn-link float-left" id="btnAddThirdColour" style="display:none">
+                        <i class="fas fa-plus text-success float-left"></i> Third Colour
+                    </a>
+                    <div id="thirdColour">
+                        @Html.LabelFor(x => x.ColourCode3, htmlAttributes: new { @class = "control-label" })
+                        <a class="btn btn-link float-right" id="btnRemoveThirdColour">
+                            <i class="fas fa-minus text-danger float-right"></i>
+                        </a>
+                        @Html.EditorFor(x => x.ColourCode3, new { htmlAttributes = new { @type = "color", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ColourCode3, "", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    <a class="btn btn-link float-left text-success" id="btnAddThirdColour">
+                        <i class="fas fa-plus float-left"></i> Third Colour
+                    </a>
+                    <div id="thirdColour" style="display:none">
+                        @Html.LabelFor(x => x.ColourCode3, htmlAttributes: new { @class = "control-label" })
+                        <a class="btn btn-link float-right" id="btnRemoveThirdColour">
+                            <i class="fas fa-minus text-danger float-right"></i>
+                        </a>
+                        @Html.EditorFor(x => x.ColourCode3, new { htmlAttributes = new { @type = "color", @class = "form-control", @disabled = "true" } })
+                        @Html.ValidationMessageFor(model => model.ColourCode3, "", new { @class = "text-danger" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary float-right">Save</button>
+        </div>
+    </div>
+}
+
+<script>
+    setBackButton('Team', '/Teams/@Model.ID.ToString()');
+
+    $('.selectpicker').selectpicker(defaultSelectSettings);
+</script>
+
+@if (ViewBag.MessageToDisplay != null)
+{
+    if (ViewBag.Success == true)
+    {
+        <script>
+            toastr.success('@ViewBag.MessageToDisplay');
+        </script>
+    }
+    else
+    {
+        <script>
+            toastr.error('@ViewBag.MessageToDisplay');
+        </script>
+    }
+}
+
+<script>
+    $('#btnRemoveThirdColour').click(function () {
+        $('#thirdColour').css('display', 'none');
+        $('#ColourCode3').attr('disabled', 'true');
+        $('#btnAddThirdColour').css('display', 'block');
+    });
+
+    $('#btnAddThirdColour').click(function () {
+        $('#thirdColour').css('display', 'block');
+        $('#ColourCode3').removeAttr('disabled');
+        $('#btnAddThirdColour').css('display', 'none');
+    });
+</script>

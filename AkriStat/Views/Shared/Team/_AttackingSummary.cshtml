@@ -1,0 +1,122 @@
+﻿@model AkriStat.ViewModels.Team.Summary.TeamSummaryAttackingVM
+
+<figure class="highcharts-figure">
+    <div id="attackingRadarChart"></div>
+</figure>
+
+<script>
+    Highcharts.chart('attackingRadarChart', {
+
+        chart: {
+            credits: false,
+            polar: true,
+            type: 'area',
+            marginTop: 85
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        title: {
+            text: 'Season Summary @Model.Season'
+        },
+
+        subtitle: {
+            text: 'vs Top 5 League Teams'
+        },
+
+        pane: {
+            size: '100%'
+        },
+
+        xAxis: {
+            categories: ['Chances Crtd /Game', 'xA /Game', 'xG /Game', 'Crosses /Game', 'Succ Dribble /Game',
+                         'Succ Dribble %', 'Pass to Final Third /Shot', 'Yards Carried (Prog) /Game', 'Pass Compltd /Game'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0,
+            max: 100
+        },
+
+        plotOptions: {
+            column: {
+                pointPadding: 0,
+                groupPadding: 0
+            },
+            series: {
+                lineWidth: 1,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.actual}'
+                }
+            }
+        },
+
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG'
+                    ]
+                }
+            }
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:#000000">Percentile: <b>{point.y}</b><br/> <span style="color:#000000">Actual: <b>{point.actual}</b>'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        series: [{
+            name: '@Html.DisplayFor(x => x.Season)',
+            data: [
+                    { y: @Html.DisplayFor(x => x.ChancesCreatedPerGamePercentile), actual: @Html.DisplayFor(x => x.ChancesCreatedPerGame) },
+                    { y: @Html.DisplayFor(x => x.XGAssistedPerGamePercentile), actual: @Html.DisplayFor(x => x.XGAssistedPerGame) },
+                    { y: @Html.DisplayFor(x => x.XGPerGamePercentile), actual: @Html.DisplayFor(x => x.XGPerGame) },
+                    { y: @Html.DisplayFor(x => x.CrossesPerGamePercentile),  actual: @Html.DisplayFor(x => x.CrossesPerGame) },
+                    { y: @Html.DisplayFor(x => x.SuccessfulDribblesPerGamePercentile),  actual: '@Html.DisplayFor(x => x.SuccessfulDribblesPerGamePercentile)' },
+                    { y: @Html.DisplayFor(x => x.SuccessfulDribblesPercentagePercentile),  actual: '@Html.DisplayFor(x => x.SuccessfulDribblesPercentage)%' },
+                    { y: @Html.DisplayFor(x => x.PassesIntoFinalThirdPerGamePercentile),  actual: @Html.DisplayFor(x => x.PassesIntoFinalThirdPerGame) },
+                    { y: @Html.DisplayFor(x => x.YardsProgressiveCarriesPerGamePercentile), actual: @Html.DisplayFor(x => x.YardsProgressiveCarriesPerGame) },
+                    { y: @Html.DisplayFor(x => x.PassesCompletedPerGamePercentile), actual: @Html.DisplayFor(x => x.PassesCompletedPerGame) }
+                  ],
+            pointPlacement: 'on',
+            color: '#1A6EFF',
+            opacity: 0.85
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 1000
+                },
+                chartOptions: {
+                    legend: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        layout: 'horizontal'
+                    },
+                    pane: {
+                        size: '80%'
+                    }
+                }
+            }]
+        }
+
+    });
+</script>

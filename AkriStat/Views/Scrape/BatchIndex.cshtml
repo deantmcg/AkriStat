@@ -1,0 +1,40 @@
+﻿@model List<AkriStat.ViewModels.Scrape.BatchIndexVM>
+
+    <div class="form-center-lg">
+        <div class="row">
+            <div class="col-12">
+                <h1 style="text-align:center"><b>Batches</b></h1>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model[0].CreatedDate)</th>
+                                    <th>@Html.DisplayNameFor(model => model[0].CreatedBy)</th>
+                                    <th>@Html.DisplayNameFor(model => model[0].ScrapeCount)</th>
+                                    <th width="1%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(x => item.CreatedDate)</td>
+                                        <td>@Html.DisplayFor(x => item.CreatedBy)</td>
+                                        <td>@Html.DisplayFor(x => item.ScrapeCount)</td>
+                                        <td>
+                                            <a asp-action="BatchDetails" asp-route-id="@item.ID">View</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setBackButton('Scrape Menu', '/Scrape');
+    </script>

@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Tab Title -->
+    <title>@ViewData["Title"] - AkriStat</title>
+    @*<link href="~/football.ico" rel="shortcut icon" type="image/x-icon" />*@
+    <link href="~/dist/img/akristat-logo.png" rel="shortcut icon" type="image/x-icon" />
+
+    @*  ↓  CSS  ↓  *@
+
+    <!-- Site Styling -->
+    <link rel="stylesheet" href="~/css/site.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Bootstrap Select  -->
+    <link rel="stylesheet" href="../../plugins/bootstrap-select/css/bootstrap-select.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="../../plugins/toastr/toastr.css" />
+
+    @*  ↓  JavaScript  ↓  *@
+
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <!-- Site JavaScript -->
+    <script src="~/js/site.js"></script>
+    <!-- Bootstrap -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Select -->
+    <script src="../../plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.js"></script>
+    <!-- Toastr -->
+    <script src="../../plugins/toastr/toastr.min.js"></script>
+</head>
+<body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        <!-- Top Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block" id="backNav" style="display:none !important">
+                    <a class="back-link nav-link">
+                        <i class="fas fa-arrow-left" style="padding-right:10px"></i>Test
+                    </a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-controller="Home" asp-action="About" class="nav-link">About</a>
+                </li>
+            </ul>
+
+            <!-- Search Bar -->
+            @using (Html.BeginForm("Search", "StandardSearch", FormMethod.Post, htmlAttributes: new { @class = "form-inline ml-3" }))
+            {
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-navbar" name="Query" type="search" placeholder="Search" 
+                           aria-label="Search" autocomplete="off" spellcheck="false">
+                    <div class="input-group-append">
+                        <button class="btn btn-navbar" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- AkriStat Logo -->
+            <a href="#" class="brand-link">
+                <img src="~/dist/img/akristat-logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">AkriStat</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <partial name="_LoginPartial" />
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item has-treeview">
+                            <!-- League Links -->
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Leagues
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <!-- Premier League Link -->
+                                <li class="nav-item">
+                                    <a asp-controller="League" asp-action="Details" asp-route-id="1" class="nav-link">
+                                        <img src="/dist/img/competition_logos/1.svg" class="nav-icon" />
+                                        <p>Premier League</p>
+                                    </a>
+                                </li>
+                                <!-- Bundesliga Link -->
+                                <li class="nav-item">
+                                    <a asp-controller="League" asp-action="Details" asp-route-id="15" class="nav-link">
+                                        <img src="/dist/img/competition_logos/15.svg" class="nav-icon" />
+                                        <p>Bundesliga</p>
+                                    </a>
+                                </li>
+                                <!-- La Liga Link -->
+                                <li class="nav-item">
+                                    <a asp-controller="League" asp-action="Details" asp-route-id="12" class="nav-link">
+                                        <img src="~/dist/img/competition_logos/12.svg" class="nav-icon" />
+                                        <p>La Liga</p>
+                                    </a>
+                                </li>
+                                <!-- Serie A Link -->
+                                <li class="nav-item">
+                                    <a asp-controller="League" asp-action="Details" asp-route-id="24" class="nav-link">
+                                        <img src="~/dist/img/competition_logos/24.svg" class="nav-icon" />
+                                        <p>Serie A</p>
+                                    </a>
+                                </li>
+                                <!-- Ligue 1 Link -->
+                                <li class="nav-item">
+                                    <a asp-controller="League" asp-action="Details" asp-route-id="39" class="nav-link">
+                                        <img src="~/dist/img/competition_logos/39.svg" class="nav-icon" />
+                                        <p>Ligue 1</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Players Link -->
+                        <li class="nav-item">
+                            <a asp-controller="Player" asp-action="Dashboard" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Players
+                                </p>
+                            </a>
+                        </li>
+                        <!-- Advanced Search Tool Link -->
+                        <li class="nav-item">
+                            <a asp-controller="AdvancedSearch" asp-action="GetSearch" class="nav-link">
+                                <i class="nav-icon fas fa-search"></i>
+                                <p>
+                                    Advanced Search
+                                </p>
+                            </a>
+                        </li>
+                        <!-- Comparison Tool Link -->
+                        <li class="nav-item">
+                            <a asp-controller="Compare" asp-action="GetCompare" class="nav-link">
+                                <i class="nav-icon fas fa-people-arrows"></i>
+                                <p>
+                                    Compare
+                                </p>
+                            </a>
+                        </li>
+                        <!-- Shortlists Link -->
+                        <li class="nav-item">
+                            <a asp-controller="Shortlist" asp-action="Index" class="nav-link">
+                                <i class="nav-icon far fa-clipboard"></i>
+                                <p>
+                                    Shortlists
+                                </p>
+                            </a>
+                        </li>
+                        <!-- Visualisation Tool Link -->
+                        <li class="nav-item">
+                            <a asp-controller="Viz" asp-action="Generate" class="nav-link">
+                                <i class="nav-icon fas fa-chart-area"></i>
+                                <p>
+                                    Viz
+                                </p>
+                            </a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item bg-gradient-indigo has-treeview">
+                                <!-- Administrator Links -->
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-user-shield"></i>
+                                    <p>
+                                        Admin
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <!-- Scraper Link -->
+                                    <li class="nav-item">
+                                        <a asp-controller="Scrape" asp-action="Index" class="nav-link">
+                                            <i class="nav-icon fas fa-magic"></i>
+                                            <p>Scraper</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav nav-treeview">
+                                    <!-- Manage Users Link -->
+                                    <li class="nav-item">
+                                        <a asp-controller="Administrator" asp-action="ManageUsers" class="nav-link">
+                                            <i class="nav-icon fas fa-users-cog"></i>
+                                            <p>Manage Users</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav nav-treeview">
+                                    <!-- Tasks Link -->
+                                    <li class="nav-item">
+                                        <a asp-controller="Administrator" asp-action="TasksIndex" class="nav-link">
+                                            <i class="nav-icon fas fa-wrench"></i>
+                                            <p>Tasks</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Chief Scout"))
+                        {
+                            <!-- My Staff Link -->
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="StaffIndex" class="nav-link">
+                                    <i class="nav-icon fas fa-user-tie"></i>
+                                    <p>
+                                        My Staff
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Main Body Content Render -->
+        <div class="content-wrapper">
+            <main role="main" class="content" style="padding-top:20px; padding-left:10px; padding-right: 10px;">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- overlayScrollbars -->
+    <script src="~/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    
+    <!-- OPTIONAL SCRIPTS -->
+    <script src="~/dist/js/demo.js"></script>
+
+    <!-- PAGE PLUGINS -->
+    <!-- jQuery Mapael -->
+    <script src="~/plugins/raphael/raphael.min.js"></script>
+
+</body>
+</html>

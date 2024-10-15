@@ -1,0 +1,159 @@
+﻿@model AkriStat.ViewModels.Search.AdvancedSearchContainerVM
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<div class="row">
+    <div class="col-md-2 col-sm-1"></div>
+    <div class="col-md-8 col-sm-10">
+        <h1 style="text-align:center"><b>Advanced Search</b></h1>
+        @using (Html.BeginForm("PostSearch", "AdvancedSearch"))
+        {
+            <table id="tblSearchConditions" class="table">
+                <thead>
+                    <tr style="border-top:none">
+                        <td colspan="3">
+                            <button type="submit" class="float-right btn btn-primary">Search</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="30%">Data</th>
+                        <th width="20%">Condition</th>
+                        <th>Value(s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Season</td>
+                        <td>Is</td>
+                        <td>
+                            <select name="Season" class="form-control">
+                                <option selected>2019-20</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Player Name</td>
+                        <td>Contains</td>
+                        <td><input type="text" asp-for="Name" class="form-control" /></td>
+                    </tr>
+                    <tr>
+                        <td>Position</td>
+                        <td>Is</td>
+                        <td>
+                            <select asp-for="Position" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                                <partial name="_PositionSelectOptions" />
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nationality</td>
+                        <td>Is</td>
+                        <td>
+                            <select asp-for="Nationality" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                                <partial name="_CountrySelectOptions" />
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Second Nationality</td>
+                        <td>Is</td>
+                        <td>
+                            <select asp-for="SecondNationality" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                                <partial name="_CountrySelectOptions" />
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Footed</td>
+                        <td>Is</td>
+                        <td>
+                            <select name="Footed" class="form-control">
+                                <option selected></option>
+                                <option>Right</option>
+                                <option>Left</option>
+                            </select>
+                        </td>
+                    </tr>
+                    @foreach (var property in ViewData.ModelMetadata.Properties)
+                    {
+                        if (property.ModelType.Name.Equals("IntRange"))
+                        {
+                            <tr>
+                                <td>@property.GetDisplayName()</td>
+                                <td>Is Between</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            @Html.Editor(property.PropertyName + ".Min", new { htmlAttributes = new { @class = "form-control", @type = "number", @step = "1" } })
+                                        </div>
+                                        <div class="col-6">
+                                            @Html.Editor(property.PropertyName + ".Max", new { htmlAttributes = new { @class = "form-control", @type = "number", @step = "1" } })
+                                        </div>
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+                        }
+                        else if (property.ModelType.Name.Equals("DateRange"))
+                        {
+                            <tr>
+                                <td>@property.GetDisplayName()</td>
+                                <td>Is Between</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            @Html.TextBox(property.PropertyName + ".Min", "yyyy-MM-dd", new { @type = "date", @class = "form-control" })
+                                        </div>
+                                        <div class="col-6">
+                                            @Html.TextBox(property.PropertyName + ".Max", "yyyy-MM-dd", new { @type = "date", @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <button type="submit" class="float-right btn btn-primary">Search</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        }
+    </div>
+    <div class="col-md-2 col-sm-1"></div>
+</div>
+
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker(defaultSelectSettings);
+
+        $('#tblSearchConditions').DataTable({
+            paging: false,
+            lengthChange: false,
+            searching: true,
+            ordering: false,
+            info: false,
+            autoWidth: true,
+            responsive: true,
+            columnDefs: [
+                { searchable: false, targets: 1 },
+                { searchable: false, targets: 2 }
+            ]
+        });
+    });
+</script>
+
+<style>
+    tr {
+        text-align: center;
+    }
+</style>

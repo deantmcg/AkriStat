@@ -1,0 +1,28 @@
+﻿@model AkriStat.ViewModels.Shortlist.ShortlistCreateVM
+
+@using (Html.BeginForm("Create", "Shortlist", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="display-6">
+                New Shortlist
+            </h1>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Name, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mb-3">
+                    <input asp-for="Name" type="text" class="form-control rounded-0">
+                    <span class="input-group-append">
+                        <button type="submit" class="btn btn-success btn-flat">Create</button>
+                    </span>
+                </div>
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    setBackButton('All Shortlists', '/Shortlists');
+</script>

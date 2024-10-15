@@ -1,0 +1,35 @@
+﻿@model List<AkriStat.ViewModels.Search.AdvancedSearchResultVM>
+
+<table id="playersTable" class="table table-sm table-hover" style="text-align:center; width:100%; margin-top: 0px !important">
+    <thead>
+        <tr>
+            <th>Player</th>
+            <th><abbr title="Nationality">NT</abbr></th>
+            <th>Age</th>
+            <th>Position</th>
+            <th>GP</th>
+            <th><abbr title="Goals">Gls</abbr></th>
+            <th><abbr title="Assists">A</abbr></th>
+            <th><abbr title="Transfer Value">Val</abbr></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr style="cursor:pointer" onclick="window.location.href = '/Players/@player.ID'">
+                <td>
+                    @player.Name
+                </td>
+                <td>
+                    <img style="transform: scale(0.6); border-radius: 50%; width:1.5rem" alt="Avatar" src="@player.NationalityFlagUrl.Replace("3x2", "1x1")">
+                </td>
+                <td>@player.Age</td>
+                <td>@player.Position</td>
+                <td>@player.GamesPlayed</td>
+                <td>@player.Goals</td>
+                <td>@player.Assists</td>
+                <td>@Html.DisplayFor(x => player.Value)</td>
+            </tr>
+        }
+    </tbody>
+</table>

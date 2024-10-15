@@ -1,0 +1,322 @@
+﻿@model AkriStat.ViewModels.Compare.ComparePlayerVM
+    <!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10 col-md-12">
+        <h1 style="text-align:center"><b>Compare Players</b></h1>
+
+        @using (Html.BeginForm("PostCompare", "Compare"))
+        {
+            <div id="accordion">
+                <div class="card card-info">
+                    <div class="card-header" style="cursor:pointer" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="true" aria-controls="collapseFilter">
+                        Edit Criteria
+                    </div>
+
+                    <div id="collapseFilter" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="row">
+                                @for (int i = 0; i < 6; i++)
+                                {
+                                    string count = (i + 1).ToString();
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-plaintext" style="text-align:center">Player @count</label>
+                                            <select name="ChosenPlayerSeasons[@i].ID" id="ChosenPlayerSeasons[@i].ID" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                                                <option selected></option>
+                                                @foreach (var option in Model.PlayerSelectList)
+                                                {
+                                                    <option value="@option.Value">@option.Text</option>
+                                                }
+                                            </select>
+                                            <select name="ChosenPlayerSeasons[@i].Season" id="ChosenPlayerSeasons[@i].Season" class="selectpicker season form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-footer">
+
+                            <button class="btn btn-primary float-right" type="submit">Update</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+<div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg 10 col-md-12">
+        <h4>Results</h4>
+        <div class="card">
+            <div class="card-body p-0">
+                <table class="table table-sm table-striped projects">
+                    <thead>
+                        <tr>
+                            <th width="20%"></th>
+                            @foreach (var player in Model.Results)
+                            {
+                                string facePicture = $"/dist/img/player_faces/{player.ID}.jpeg";
+                                <th onclick="window.location.href = '/Players/@player.ID'" style="cursor:pointer">
+                                    <img alt="Avatar" class="table-avatar" src="@facePicture"
+                                         title="@player.Name" onerror="this.onerror=null; this.src='/dist/img/player_faces/default.jpeg'" />
+                                    <h5>@player.Name</h5>
+                                    <h6>@player.Season</h6>
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <b>Nationality</b>
+                            </td>
+                            @foreach (var player in Model.Results)
+                            {
+                                <td>
+                                    <img style="transform: scale(0.6)" alt="Avatar" class="table-avatar" src="@player.NationalityFlagUrl.Replace("3x2", "1x1")">
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Position</b>
+                            </td>
+                            @foreach (var player in Model.Results)
+                            {
+                                <td>
+                                    @if (new List<string>() { "GK" }.Contains(player.Position))
+                                    {
+                                        <a style="font-size:medium" class="badge bg-keeper">@player.Position</a>
+                                    }
+                                    else if (new List<string>() { "RB", "LB", "WB" }.Contains(player.Position))
+                                    {
+                                        <a style="font-size:medium" class="badge bg-full-back">@player.Position</a>
+                                    }
+                                    else if (new List<string>() { "CB" }.Contains(player.Position))
+                                    {
+                                        <a style="font-size:medium" class="badge bg-centre-back">@player.Position</a>
+                                    }
+                                    else if (new List<string>() { "DM", "CM" }.Contains(player.Position))
+                                    {
+                                        <a style="font-size:medium" class="badge bg-centre-mid">@player.Position</a>
+                                    }
+                                    else if (new List<string>() { "AM", "LW", "RW", "LM", "RM" }.Contains(player.Position))
+                                    {
+                                        <a style="font-size:medium" class="badge bg-am-winger">@player.Position</a>
+                                    }
+                                    else if (new List<string>() { "FW" }.Contains(player.Position))
+                                    {
+                                        <a style="font-size:medium" class="badge bg-forward">@player.Position</a>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Age</b>
+                            </td>
+                            @foreach (var player in Model.Results)
+                            {
+                                <td>
+                                    @player.Age
+                                </td>
+                            }
+                        </tr>
+                        @foreach (var property in ViewData.ModelMetadata.Properties.FirstOrDefault(x => x.Name.Equals("Results")).ElementMetadata.Properties
+                                          .Where(x => new string[] { "Int32", "Decimal", "Double" }.Contains(x.ModelType.Name)
+                                                 && !x.Name.Contains("ID")))
+                        {
+                            <tr>
+                                <td>
+                                    @if (property.DisplayName == null)
+                                    {
+                                        <b>@property.Name</b>
+                                    }
+                                    else
+                                    {
+                                        <b>@property.DisplayName</b>
+                                    }
+                                </td>
+                                @foreach (var player in Model.Results)
+                                {
+                                    if (player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player) == null)
+                                    {
+                                        <td>-</td>
+                                    }
+                                    else
+                                    {
+                                        @if (property.Name.Equals("Height"))
+                                        {
+                                            <td>
+                                                @String.Format("{0:0}", player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player)) cm
+                                            </td>
+                                        }
+                                        else if (property.Name.Equals("Weight"))
+                                        {
+                                            <td>
+                                                @player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player) kg
+                                            </td>
+                                        }
+                                        else if (new string[] { "Value", "WeeklyWage" }.Contains(property.Name))
+                                        {
+                                            <td>
+                                                @String.Format("{0:C0}", player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player))
+                                            </td>
+                                        }
+                                        @*else if (new string[] { "Double", "Decimal" }.Contains(property.ModelType.Name))
+                                        {
+                                            <td>
+                                                @String.Format("{0:0.00}", player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player))
+                                            </td>
+                                        }*@
+                                        else if (property.ModelType.Name.Equals("Double"))
+                                        {
+                                            var highest = Model.Results.Select(x => (double)x.GetType().GetProperties().FirstOrDefault(y => y.Name.Equals(property.Name)).GetValue(x)).OrderByDescending(x => x).First();
+                                            var value = (double)player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player);
+                                            if (value == highest && value != 0)
+                                            {
+                                                <td class="bg-gradient-success">
+                                                    @String.Format("{0:0.00}", value)
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @String.Format("{0:0.00}", value)
+                                                </td>
+                                            }
+                                            @*<td>
+                                                    @String.Format("{0:0.00}", player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player))
+                                                </td>*@
+                                        }
+                                        else if (property.ModelType.Name.Equals("Decimal"))
+                                        {
+                                            var highest = Model.Results.Select(x => (decimal)x.GetType().GetProperties().FirstOrDefault(y => y.Name.Equals(property.Name)).GetValue(x)).OrderByDescending(x => x).First();
+                                            var value = (decimal)player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player);
+                                            if (value == highest && value != 0)
+                                            {
+                                                <td class="bg-gradient-success">
+                                                    @String.Format("{0:0.00}", value)
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @String.Format("{0:0.00}", value)
+                                                </td>
+                                            }
+                                            @*<td>
+                                                    @String.Format("{0:0.00}", player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player))
+                                                </td>*@
+                                        }
+                                        else
+                                        {
+                                            var highest = Model.Results.Select(x => (int)x.GetType().GetProperties().FirstOrDefault(y => y.Name.Equals(property.Name)).GetValue(x)).OrderByDescending(x => x).First();
+                                            var value = (int)player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player);
+                                            if (value == highest && value != 0)
+                                            {
+                                                <td class="bg-gradient-success">
+                                                    @value
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @value
+                                                </td>
+                                            }
+                                            @*<td>
+                                                    @player.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals(property.Name)).GetValue(player)
+                                                </td>*@
+                                        }
+                                    }
+
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker(defaultSelectSettings);
+
+        $('.selectpicker.season').selectpicker('hide');
+        let comparedPlayers = @Html.Raw(Json.Serialize(Model.ChosenPlayerSeasons.Select(x => x.ID).ToArray()));
+
+        $.each(comparedPlayers, function (index) {
+            if (comparedPlayers != null) {
+                let selector = 'select[name="ChosenPlayerSeasons[' + index + '].ID"]';
+                let select = $(selector);
+                select.selectpicker('val', comparedPlayers[index]);
+                getPlayerSeasons(index, select.val());
+            }
+        });
+
+        $('select[id*=".ID"]').change(function () {
+            let index = $(this).attr('name').replace('ChosenPlayerSeasons[', '').replace('].ID', '');
+            let playerId = $(this).val();
+            getPlayerSeasons(index, playerId);
+        });
+
+        function getPlayerSeasons(index, _playerId) {
+            let seasonSelect = $('select[name="ChosenPlayerSeasons[' + index + '].Season"]');
+            seasonSelect.empty();
+            $.ajax({
+                type: "GET",
+                url: "/Compare/GetPlayerSeasons",
+                data: { playerId: _playerId },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        seasonSelect.append(`<option>${response[i]}</option>`);
+                    }
+                    seasonSelect.selectpicker('show');
+                    seasonSelect.selectpicker('refresh');
+                    var firstVal = $('select[name = "ChosenPlayerSeasons[' + index + '].Season"] option:first').val();
+                    seasonSelect.selectpicker('val', firstVal);
+                },
+                error: function (responese) {
+                    alert("Error. Contact site admin");
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    th {
+        text-align: center;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 3.5rem;
+        background: white;
+        z-index: 10;
+        padding-bottom: 0.25rem !important;
+    }
+
+    td {
+        text-align: center;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+</style>

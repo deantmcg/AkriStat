@@ -1,0 +1,36 @@
+﻿@model List<AkriStat.ViewModels.Shortlist.ShortlistedPlayerLineVM>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-sm table-hover table-dt-default" id="tblShortlist">
+        <thead>
+            <tr>
+                <th width="40%">Player</th>
+                <th width="15%">Position</th>
+                <th width="15%">Age</th>
+                <th width="15%">Value</th>
+                <th width="15%">Contract</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var player in Model)
+            {
+                <tr onclick="/Players/@player.ID" style="cursor: pointer">
+                    <td>@player.Name</td>
+                    <td>@player.Position</td>
+                    <td>@player.Age</td>
+                    <td>@player.ValueString</td>
+                    <td>@Html.DisplayFor(x => player.ContractExpiry)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="row">
+        <div class="col-12 text-black-50" style="text-align:center; padding-top:10px">
+            No players on this shortlist.
+        </div>
+    </div>
+}
