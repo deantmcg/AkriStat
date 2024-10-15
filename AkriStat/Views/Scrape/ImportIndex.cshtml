@@ -1,0 +1,53 @@
+﻿@model List<AkriStat.ViewModels.Scrape.ImportIndexVM>
+
+    <div class="form-center-lg">
+        <div class="row">
+            <div class="col-12">
+                <h1 style="text-align:center"><b>Imports</b></h1>
+                <div class="card card-primary">
+                    <div class="card-body">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model[0].PlayerName)</th>
+                                    <th>@Html.DisplayNameFor(model => model[0].Season)</th>
+                                    <th>@Html.DisplayNameFor(model => model[0].DateScraped)</th>
+                                    <th>@Html.DisplayNameFor(model => model[0].Executed)</th>
+                                    <th width="4%"></th>
+                                    <th width="4%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(x => item.PlayerName)</td>
+                                        <td>@Html.DisplayFor(x => item.Season)</td>
+                                        <td>@Html.DisplayFor(x => item.DateScraped)</td>
+                                        <td>@Html.DisplayFor(x => item.DateExecuted)</td>
+                                        <td>
+                                            @if (!item.Executed || (item.Success.HasValue && !item.Success.Value))
+                                            {
+                                                <a asp-action="ExecuteImport" asp-route-importId="@item.ID" title="Import">
+                                                    <i class="fas fa-lg fa-upload"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a asp-action="DownloadImportCsv" asp-route-importId="@item.ID" title="Download CSV">
+                                                <i class="fas fa-lg fa-file-download"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setBackButton('Scrape Menu', '/Scrape');
+    </script>

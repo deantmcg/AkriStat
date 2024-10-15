@@ -1,0 +1,92 @@
+﻿@model AkriStat.ViewModels.Viz.VizGenerateVM
+
+@{ ViewData["Title"] = "Viz Generator"; }
+
+<div class="form-center">
+    <div class="row" style="padding-bottom:10px">
+        <div class="col-12">
+            <h1 style="text-align:center"><b>Visualisation Generator</b></h1>
+        </div>
+    </div>
+    @if (Model.Success.HasValue && !Model.Success.Value && Model.ErrorMessages.Count() > 0)
+    {
+        <div class="row">
+            <div class="col-12" id="validation">
+                <label class="control-label text-danger">Attention Required:</label>
+                <ul>
+                    @foreach (var error in Model.ErrorMessages)
+                    {
+                        <li class="text-danger">@error</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm("Generate", "Viz", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Subtitle" class="control-label"></label>
+                    <input asp-for="Subtitle" class="form-control" />
+                    <span asp-validation-for="Subtitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="VizType" class="control-label"></label>
+                    <select asp-for="VizType" class="form-control" asp-items="@Model.VizTypeSelectList">
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="VizType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox" asp-for="Stacked">
+                        <label asp-for="Stacked" class="control-label"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PlayerIds" class="control-label"></label>
+                    <select asp-for="PlayerIds" asp-items="@Model.PlayersSelectList" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DataPoints" class="control-label"></label>
+                    <select asp-for="DataPoints" asp-items="@Model.DataSelectList" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MinutesPlayed" class="control-label"></label>
+                    <input asp-for="MinutesPlayed" class="form-control" />
+                    <span asp-validation-for="MinutesPlayed" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary float-right">Generate</button>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $('.selectpicker').selectpicker(defaultSelectSettings);
+</script>
+
+@if (Model.PlayerIds != null)
+{
+    <script>
+        let playerIds = @Html.Raw(Json.Serialize(Model.PlayerIds));
+        $('#PlayerIds').selectpicker('val', playerIds)
+    </script>
+}
+
+@if (Model.DataPoints != null)
+{
+    <script>
+        let dataPoints = @Html.Raw(Json.Serialize(Model.DataPoints));
+        $('#DataPoints').selectpicker('val', dataPoints)
+    </script>
+}
+

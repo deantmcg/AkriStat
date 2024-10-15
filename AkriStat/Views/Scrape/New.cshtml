@@ -1,0 +1,120 @@
+﻿@model AkriStat.ViewModels.Scrape.ScrapeDetailsVM
+
+<div class="row" id="frmScrape">
+    <div class="col-8">
+        <div class="form-group">
+            <label asp-for="Season" class="control-label"></label>
+            <select asp-for="Season" asp-items="@Model.SeasonSelectList" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true"></select>
+        </div>
+        <div class="form-group">
+            <label asp-for="PlayerIds" class="control-label"></label>
+            <select asp-for="PlayerIds" asp-items="@Model.PlayerSelectList" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true"></select>
+        </div>
+        <div class="form-group">
+            <label asp-for="FbRefIds" class="control-label">New Players (FbRef IDs)</label>
+            <a class="text-primary float-right">Comma, space or new line separated</a>
+            <textarea asp-for="FbRefIds" class="form-control" rows="6"></textarea>
+        </div>
+        <button id="btnStart" class="btn btn-primary float-right">Start</button>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="control-label">Scrape all Players on Team</label>
+            <select id="teamSelect" asp-items="@Model.TeamSelectList" class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                <option selected></option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row" id="frmResults" style="display:none; padding: 5rem">
+    <div class="col-12">
+        <div class="alert alert-success">
+            <h4><i class="icon fas fa-check"></i> Scrape Batch Started!</h4>
+            <h5>Scrapes may take a few minutes to complete.<br />You can view the status of your scrape on the Batch Details page.</h5>
+            <button id="btnViewResults" class="btn btn-light">View Results</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .alert-success {
+        text-align: center;
+        padding: 2.5rem;
+    }
+</style>
+
+<script>
+    setBackButton('Scrape Menu', '/Scrape');
+    $('.selectpicker').selectpicker(defaultSelectSettings);
+
+
+    $('#teamSelect').change(function () {
+        $('#btnStart').attr('disabled', 'true');
+        $('#FbRefIds').attr('disabled', 'true');
+        $('#teamSelect').next().attr('disabled', 'true');
+
+        if ($(this).val() != '') {
+            getTeamPlayerIds();
+        }
+    });
+
+    $('#Season').change(function () {
+        if ($('#teamSelect').val() != '') {
+            getTeamPlayerIds();
+        }
+    });
+
+    function getTeamPlayerIds() {
+        $.ajax({
+            url: "/Scrape/GetTeamPlayerFbRefIds/",
+            method: "GET",
+            data: {
+                season: $('#Season').val(),
+                teamFbRefId: $('#teamSelect').val()
+            },
+            dataType: "json",
+            success: function (response) {
+                $('#FbRefIds').val(response.fbRefIds);
+                $('#btnStart').removeAttr('disabled');
+                $('#FbRefIds').removeAttr('disabled');
+                $('#teamSelect').next().removeAttr('disabled');
+            },
+            error: function (response) {
+                toastr.error('Failed to get IDs for Team');
+            }
+        });
+    }
+
+    $('#btnStart').click(function () {
+        var myData = {
+            Season: $('#Season').val(),
+            PlayerIds: $('#PlayerIds').val(),
+            FbRefIds: $('#FbRefIds').val()
+        };
+        console.log(myData);
+
+        $.ajax({
+            url: "/Scrape/CreateBatch",
+            method: "POST",
+            data: myData,
+            dataType: "json",
+            success: function (response) {
+                $('#btnViewResults').click(function () { window.location.href = '/Scrape/Batches/' + response.batchId });
+                $('#frmScrape').css('display', 'none');
+                $('#frmResults').css('display', 'block');
+
+                $.ajax({
+                    url: "/Scrape/StartScrape/",
+                    method: "POST",
+                    data: {
+                        batchId: response.batchId
+                    },
+                    dataType: "json"
+                });
+            },
+            error: function () {
+                console.log('error');
+            }
+        });
+    });
+</script>

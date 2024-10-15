@@ -1,0 +1,116 @@
+﻿@model AkriStat.ViewModels.Player.Summary.SummaryKeeperVM
+
+<figure class="highcharts-figure">
+    <div id="keeperRadarChart"></div>
+</figure>
+
+<script>
+    Highcharts.chart('keeperRadarChart', {
+
+        chart: {
+            credits: false,
+            polar: true,
+            type: 'area',
+            marginTop: 85
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        title: {
+            text: 'Season Summary @Model.Season'
+        },
+
+        pane: {
+            size: '100%'
+        },
+
+        xAxis: {
+            categories: ['SoT Faced /90', 'ps xG /90', 'Passes Cmp %', 'Pass >40yd %',
+                         'Cross Stop %', 'Avg Gl Kick Launch %', 'Saves /90'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0,
+            max: 100
+        },
+
+        plotOptions: {
+            column: {
+                pointPadding: 0,
+                groupPadding: 0
+            },
+            series: {
+                lineWidth: 1,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.actual}'
+                }
+            }
+        },
+
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG'
+                    ]
+                }
+            }
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:#000000">Percentile: <b>{point.y}</b><br/> <span style="color:#000000">Actual: <b>{point.actual}</b>'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        series: [{
+            name: '@Model.Season',
+            data: [
+                    { y: @Html.DisplayFor(x => x.ShotsOnTargetFacedPer90Percentile), actual: @Html.DisplayFor(x => x.GkShotsOnTargetFacedPer90) },
+                    { y: @Html.DisplayFor(x => x.PostShotXGPer90Percentile), actual: @Html.DisplayFor(x => x.GkPostShotXGPer90) },
+                    { y: @Html.DisplayFor(x => x.PassesCompletedPercentagePercentile), actual: '@Html.DisplayFor(x => x.PassesCompletedPercentage)%' },
+                    { y: @Html.DisplayFor(x => x.PassesAttemptedOver40YardsPercentagePercentile), actual: '@Html.DisplayFor(x => x.GkPassesAttemptedOver40YardsPercentage)%' },
+                    { y: @Html.DisplayFor(x => x.OpponentCrossesStoppedPercentagePercentile), actual: '@Html.DisplayFor(x => x.GkOpponentCrossesStoppedPercentage)%' },
+                    { y: @Html.DisplayFor(x => x.AverageGoalKicksLaunchedPercentagePercentile), actual: '@Html.DisplayFor(x => x.GkAverageGoalKicksLaunchedPercentage)%' },
+                    { y: @Html.DisplayFor(x => x.SavesPer90Percentile), actual: @Html.DisplayFor(x => x.GkSavesPer90) }
+                  ],
+            pointPlacement: 'on',
+            color: '#8A2BE2',
+            opacity: 0.85
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        layout: 'horizontal'
+                    },
+                    pane: {
+                        size: '80%'
+                    }
+                }
+            }]
+        }
+
+    });
+</script>

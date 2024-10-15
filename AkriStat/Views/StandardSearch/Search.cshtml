@@ -1,0 +1,176 @@
+﻿@model AkriStat.ViewModels.Search.StandardSearchContainerVM
+
+<div class="row">
+    <div class="col-lg-2 col-md-1"></div>
+    <div class="col-lg-8 col-md-10">
+        @using (Html.BeginForm("Search", "StandardSearch", FormMethod.Post))
+        {
+            <div class="form-group">
+                <div class="input-group mb-3">
+                    @Html.EditorFor(x => x.Query, new { htmlAttributes = new { @class = "form-control" } })
+                    <span class="input-group-append">
+                        <button type="submit" class="btn btn-success btn-flat">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+                @Html.ValidationMessageFor(model => model.Query, "", new { @class = "text-danger" })
+            </div>
+        }
+    </div>
+    <div class="col-lg-2 col-md-1"></div>
+</div>
+<div class="row">
+    <div class="col-lg-2 col-md-1"></div>
+    <div class="col-lg-8 col-md-10">
+        @{ int totalResults = Model.Players.Count + Model.Teams.Count; }
+        <h4>Results (@totalResults)</h4>
+        @if (Model.Players.Count > 0)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Players</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects">
+                        <tbody>
+                            @foreach (var item in Model.Players)
+                            {
+                                <tr>
+                                    @{ string facePicture = $"/dist/img/player_faces/{item.ID}.jpeg"; }
+                                    <td style="width: 1%">
+                                        <img alt="Avatar" class="table-avatar" src="@facePicture" 
+                                             onerror="this.onerror=null; this.src='/dist/img/player_faces/default.jpeg'" />
+                                    </td>
+                                    <td style="width: 1%">
+                                        <img style="transform: scale(0.6)" alt="Avatar" class="table-avatar" src="@item.NationalityFlagUrl.Replace("3x2", "1x1")">
+                                    </td>
+                                    <td style="width: 1%">
+                                        @if (new List<string>() { "GK" }.Contains(item.Position))
+                                        {
+                                            <a style="font-size:medium" class="badge bg-keeper">@item.Position</a>
+                                        }
+                                        else if (new List<string>() { "RB", "LB", "WB" }.Contains(item.Position))
+                                        {
+                                            <a style="font-size:medium" class="badge bg-full-back">@item.Position</a>
+                                        }
+                                        else if (new List<string>() { "CB" }.Contains(item.Position))
+                                        {
+                                            <a style="font-size:medium" class="badge bg-centre-back">@item.Position</a>
+                                        }
+                                        else if (new List<string>() { "DM", "CM" }.Contains(item.Position))
+                                        {
+                                            <a style="font-size:medium" class="badge bg-centre-mid">@item.Position</a>
+                                        }
+                                        else if (new List<string>() { "AM", "LW", "RW", "RM", "LM" }.Contains(item.Position))
+                                        {
+                                            <a style="font-size:medium" class="badge bg-am-winger">@item.Position</a>
+                                        }
+                                        else if (new List<string>() { "FW" }.Contains(item.Position))
+                                        {
+                                            <a style="font-size:medium" class="badge bg-forward">@item.Position</a>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a style="font-size:x-large; color:black" asp-controller="Player" asp-action="Details" asp-route-id="@item.ID">
+                                            @item.Name
+                                        </a>
+                                    </td>
+
+                                    <td class="project-actions text-right" style="width: 20%">
+                                        <a asp-controller="Player" asp-action="Details" asp-route-id="@item.ID" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-folder">
+                                            </i>
+                                            View
+                                        </a>
+                                        @*<a class="btn btn-info btn-sm" href="#">
+                                                <i class="fas fa-clipboard">
+                                                </i>
+                                                Shortlists
+                                            </a>*@
+                                        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                                        {
+                                            <a class="btn btn-warning btn-sm" asp-controller="Player" asp-action="Edit" asp-route-id="@item.ID">
+                                                <i class="fas fa-pencil-alt">
+                                                </i>
+                                                Edit
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        }
+        @if (Model.Teams.Count > 0)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Teams</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects">
+                        <tbody>
+                            @foreach (var item in Model.Teams)
+                            {
+                                var teamCrest = $"/dist/img/club_crests/{item.ID}.svg";
+                                <tr>
+                                    <td style="width: 1%">
+                                        <img alt="Avatar" class="table-avatar" src=@teamCrest>
+                                    </td>
+                                    <td>
+                                        <a style="font-size:x-large; color:black" asp-controller="Team" asp-action="Details" asp-route-id="@item.ID">
+                                            @item.Name
+                                        </a>
+                                    </td>
+                                    <td class="project-actions text-right" style="width: 20%">
+                                        <a asp-controller="Team" asp-action="Details" asp-route-id="@item.ID" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-folder">
+                                            </i>
+                                            View
+                                        </a>
+                                        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                                        {
+                                    <a class="btn btn-warning btn-sm" asp-controller="Team" asp-action="Edit" asp-route-id="@item.ID">
+                                        <i class="fas fa-pencil-alt">
+                                        </i>
+                                        Edit
+                                    </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        }
+    </div>
+    <div class="col-lg-2 col-md-1"></div>
+</div>

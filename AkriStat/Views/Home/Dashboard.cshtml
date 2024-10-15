@@ -1,0 +1,428 @@
+﻿@{ ViewData["Title"] = "Dashboard"; }
+
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+
+<div class="row">
+    <div class="col-md-4 col-sm-6 col-12">
+        @if (User.Identity.IsAuthenticated)
+        {
+            string teamCrest = $"/dist/img/club_crests/{ViewBag.MyTeamID}.svg";
+            <a href="/Teams/@ViewBag.MyTeamID">
+                <div class="small-box dashboard-top-card" id="myTeamCard" style="background-color: @ViewBag.MyTeamColour1">
+                    <div class="inner" style="color: @ViewBag.MyTeamColour2; text-align:left!important">
+                        <h3>My Team</h3>
+                        <p>@ViewBag.MyTeamName</p>
+                        <div class="icon" style="display:block">
+                            <i><img src=@teamCrest style="height: 5.5rem; vertical-align: top" /></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+        else
+        {
+            <div class="small-box bg-info dashboard-top-card">
+                <div class="inner">
+                    <form method="post" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="input-group mb-3">
+                                    <input name="Input.Email" id="Input.Email" type="email" class="form-control" placeholder="Email">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-envelope"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input name="Input.Password" id="Input.Password" type="password" class="form-control" placeholder="Password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div>
+                                            <input name="Input.RememberMe" id="Input.RememberMe" type="checkbox">
+                                            <label>
+                                                Remember Me
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="submit" class="btn btn-primary btn-block">Go</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-md-4 col-sm-6 col-12">
+        <div class="card card-red dashboard-top-card">
+            <div class="card-header">
+                <div class="card-title">Quick Search</div>
+            </div>
+            <div class="card-body bg-red round-bottom-edge">
+                <form asp-controller="StandardSearch" asp-action="Search">
+                    <div class="row">
+
+                        <div class="input-group mb-3">
+                            <input name="Query" id="Query" type="text" class="form-control" autocomplete="off" spellcheck="false">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-search"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-12">
+        <div class="card card-success dashboard-top-card">
+            <div class="card-header">
+                <div class="card-title">Quick Compare</div>
+            </div>
+            <div class="card-body bg-success round-bottom-edge">
+                <form asp-controller="Compare" asp-action="PostCompare">
+                    <div class="row">
+                        <div class="col-10">
+                            <select name="ChosenPlayerSeasons[0].ID" id="ChosenPlayerSeasons[0].ID" asp-items="@ViewBag.PlayersSelectList"
+                                    class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                                <option></option>
+                            </select>
+                            <input type="hidden" name="ChosenPlayerSeasons[0].Season" id="ChosenPlayerSeasons[0].Season" value="@ViewBag.CurrentSeason" />
+                            <select name="ChosenPlayerSeasons[1].ID" id="ChosenPlayerSeasons[1].ID" asp-items="@ViewBag.PlayersSelectList"
+                                    class="selectpicker form-control" data-live-search="true" data-live-search-normalize="true">
+                                <option></option>
+                            </select>
+                            <input type="hidden" name="ChosenPlayerSeasons[1].Season" id="ChosenPlayerSeasons[1].Season" value="@ViewBag.CurrentSeason" />
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-people-arrows"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-4 col-md-5">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row">
+                    <div class="card-title">Top Performers</div>
+                </div>
+            </div>
+            <div class="card-body p-top-0">
+                <div class="row">
+                    <div class="col-lg-6 col-7">
+                        <div class="form-group">
+                            <select class="selectpicker form-control" id="topPerformerMetric">
+                                <option value="Goals">Goals</option>
+                                <option value="Xg">xG</option>
+                                <option value="Assists">Assists</option>
+                                <option value="XgAssisted">xA</option>
+                                <option value="CarriesPer90">Carries per 90</option>
+                                <option value="PassesCompletedPer90">Passes Completed per 90</option>
+                                <option value="GkCleanSheets">Clean Sheets</option>
+                                <option value="DribblersTackled">Dribblers Tackled</option>
+                                <option value="GkPostShotXgPer90">Post-Shot xG per 90</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-1"></div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <select class="selectpicker form-control" id="topPerformerFocus">
+                                <option value="player">Player</option>
+                                <option value="team">Team</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div id="topPerformersPartial"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row">
+                    <div class="card-title">Matches</div>
+                </div>
+            </div>
+            <div class="card-body p-top-0">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="form-group">
+                            <input id="matchDate" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div id="matchesPartial"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-8 col-md-7">
+        @if (User.Identity.IsAuthenticated)
+        {
+            @if (User.IsInRole("Chief Scout") && ViewBag.StaffActivity != null && ViewBag.StaffActivity.Names.Length != 0)
+            {
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row">
+                            <div class="card-title">Staff Activity</div>
+                        </div>
+                    </div>
+                    <div class="card-body p-top-0">
+                        <div id="staffActivityGraph"></div>
+                    </div>
+                </div>
+            }
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row">
+                        <div class="card-title">My Shortlists</div>
+                    </div>
+                </div>
+                <div class="card-body p-top-0">
+                    <div class="row">
+                        <div class="col-5">
+                            <select class="selectpicker form-control" id="shortlistSelect" asp-items="@ViewBag.ShortlistsSelectList"></select>
+                        </div>
+                        <div class="col-7">
+                            <a class="float-right" href="" id="fullShortlistLink">Full Shortlist</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="shortlistPartial"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row">
+                    <div class="card-title">Leagues</div>
+                </div>
+            </div>
+            <div class="card-body p-top-0">
+                <div class="row">
+                    <div class="col-5">
+                        <select class="selectpicker form-control" id="leagueSelect" asp-items="@ViewBag.LeaguesSelectList"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div id="leagueTablePartial"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<!-- Highcharts -->
+<script src="../../plugins/highcharts/highcharts.js"></script>
+<script src="../../plugins/highcharts/highcharts-more.js"></script>
+<script src="../../plugins/highcharts/modules/exporting.js"></script>
+<script src="../../plugins/highcharts/modules/export-data.js"></script>
+<script src="../../plugins/highcharts/modules/accessibility.js"></script>
+
+<script>
+    $('.selectpicker').selectpicker(defaultSelectSettings);
+</script>
+
+<style>
+    .p-top-0 {
+        padding-top: 0rem
+    }
+
+    #myTeamCard:hover {
+        filter: brightness(90%);
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        loadTopPerformers();
+        loadMatches();
+        loadLeagueTable();
+
+        $('#topPerformerMetric').change(function () { loadTopPerformers() });
+        $('#topPerformerFocus').change(function () { loadTopPerformers() });
+        $('#leagueSelect').change(function () { loadLeagueTable(); });
+
+        $('#matchDate').change(function () { loadMatches() });
+
+        function loadTopPerformers() {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetTopPerformersPartial",
+                data: { metric: $('#topPerformerMetric').val(), focus: $('#topPerformerFocus').val() },
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $('#topPerformersPartial').html(response);
+                }
+            });
+        }
+
+        function loadMatches() {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetMatchesPartial",
+                data: { date: $('#matchDate').val() },
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $('#matchesPartial').html(response);
+                }
+            });
+        }
+
+        function loadLeagueTable() {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetLeagueTablePartial",
+                data: { id: $('#leagueSelect').val() },
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $('#leagueTablePartial').html(response);
+                }
+            });
+        }
+    });
+
+
+</script>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <script>
+        loadShortlist();
+
+        $('#shortlistSelect').change(function () { loadShortlist(); });
+
+        function loadShortlist() {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetShortlistPartial",
+                data: { id: $('#shortlistSelect').val() },
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $('#shortlistPartial').html(response);
+                    $('#tblShortlist').DataTable({
+                        language: {
+                            emptyTable: "No players on shortlist."
+                        },
+                        dom: 'Bfrtip',
+                        pageLength: 10,
+                        searching: false,
+                        ordering: true,
+                        info: false,
+                        autoWidth: true,
+                        responsive: true,
+                        columnDefs: [
+                            { type: "currency", targets: 3 }
+                        ]
+                    });
+                }
+            });
+            $('#fullShortlistLink').attr('href', '/Shortlists/' + $('#shortlistSelect').val());
+        }
+    </script>
+}
+
+@if (User.IsInRole("Chief Scout") && ViewBag.StaffActivity != null && ViewBag.StaffActivity.Names.Length != 0)
+{
+    <script>
+        Highcharts.chart('staffActivityGraph', {
+            chart: {
+                type: 'column'
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: 'Players Shortlisted'
+            },
+            xAxis: {
+                //categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+                categories: @Html.Raw(Json.Serialize(ViewBag.StaffActivity.Names))
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            legend: {
+                align: 'right',
+                x: -30,
+                verticalAlign: 'top',
+                y: 25,
+                floating: true,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'Last 7 Days',
+                data: @Html.Raw(Json.Serialize(ViewBag.StaffActivity.ShortlistedInLastWeek))
+            }, {
+                name: 'Last Month',
+                data: @Html.Raw(Json.Serialize(ViewBag.StaffActivity.ShortlistedInLastMonth))
+            }, {
+                name: 'Last 3 Months',
+                data: @Html.Raw(Json.Serialize(ViewBag.StaffActivity.ShortlistedInLast3Months))
+            }]
+        });
+    </script>
+}

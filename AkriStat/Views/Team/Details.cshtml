@@ -1,0 +1,166 @@
+﻿@model AkriStat.ViewModels.Team.TeamDetailsVM
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<div class="row">
+    <div class="col-xl-4 col-lg-5 col-md-6">
+        <div class="card card-widget widget-profile">
+            <div class="widget-profile-header" style="background-color:@Model.ColourCode1">
+                <h2 class="team-name" style="color:@Model.ColourCode2;">@Model.Name</h2>
+            </div>
+            @{ string teamCrest = $"/dist/img/club_crests/{@Model.ID}.svg"; }
+            <div class="widget-profile-image">
+                <img src=@teamCrest alt="@Model.Name Crest" title="@Model.Name Crest" style="border:none" />
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="description-block border-right">
+                            <h5 class="description-header"><img style="height:45px" src="@Model.NationFlagUrl" title="@Model.NationName" /></h5>
+                        </div>
+                    </div>
+                    @{ string leagueLogo = $"/dist/img/competition_logos/{@Model.CurrentLeagueID}.svg"; }
+                    <div class="col-4">
+                        <div class="description-block border-right" onclick="window.location.href = '/Leagues/@Model.CurrentLeagueID'" style="cursor:pointer">
+                            <h5 class="description-header"><img style="height:45px" src=@leagueLogo title="@Model.CurrentLeagueName" /></h5>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="description-block">
+                            <h5 class="description-header">Squad Value</h5>
+                            <span class="description-text">@Html.DisplayFor(x => x.TotalValueDisplay)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-outline card-primary" style="border-top: 3px solid @Model.ColourCode1">
+            <div class="card-header" style="border-top: 3px solid @Model.ColourCode2">
+                <h3 class="card-title">@Model.CurrentLeagueName</h3>
+                <a class="float-right" asp-controller="League" asp-action="Details" asp-route-id="@Model.CurrentLeagueID">Full</a>
+            </div>
+            <div class="card-body p-0">
+                <div id="leagueTableSnapshotPartial"></div>
+            </div>
+        </div>
+        <div class="card card-outline card-primary" style="border-top: 3px solid @Model.ColourCode1">
+            <div class="card-header" style="border-top: 3px solid @Model.ColourCode2">
+                <h3 class="card-title">Matches</h3>
+            </div>
+            <div class="card-body p-0">
+                <div id="matchesPlayedPartial"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-8 col-lg-7 col-md-6">
+        <div class="card card-outline card-primary" style="border-top: 3px solid @Model.ColourCode1">
+            <div class="card-header" style="border-top: 3px solid @Model.ColourCode2">
+                Squad
+            </div>
+            <div class="card-body p-0" id="currentSquadPartial">
+                @*<div></div>*@
+            </div>
+        </div>
+        <div class="card card-outline card-primary" style="border-top: 3px solid @Model.ColourCode1">
+            <div class="card-body" style="border-top: 3px solid @Model.ColourCode2">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="attacking-tab" data-toggle="tab" href="#attacking" role="tab" aria-controls="attacking" aria-selected="false">Attacking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="defensive-tab" data-toggle="tab" href="#defensive" role="tab" aria-controls="defensive" aria-selected="false">Defensive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="xg-tab" data-toggle="tab" href="#xg" role="tab" aria-controls="xg" aria-selected="true">xG vs Goals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="player-carries-tab" data-toggle="tab" href="#player-carries" role="tab" aria-controls="player-carries" aria-selected="false">Player Carries</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="keeper-tab" data-toggle="tab" href="#keeper" role="tab" aria-controls="keeper" aria-selected="false">-</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="attacking" role="tabpanel" aria-labelledby="attacking-tab">
+                        <div id="attackingPartial"></div>
+                    </div>
+                    <div class="tab-pane fade" id="defensive" role="tabpanel" aria-labelledby="defensive-tab">
+                        <div id="defensivePartial"></div>
+                    </div>
+                    <div class="tab-pane fade" id="xg" role="tabpanel" aria-labelledby="xg-tab">
+                        <div id="xgPartial"></div>
+                    </div>
+                    <div class="tab-pane fade" id="player-carries" role="tabpanel" aria-labelledby="player-carries-tab">
+                        <div id="playerCarriesPartial"></div>
+                    </div>
+                    <div class="tab-pane fade" id="keeper" role="tabpanel" aria-labelledby="keeper-tab">
+                        <div id="keeperPartial"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-uk.js"></script>
+<!-- Highcharts -->
+<script src="../../plugins/highcharts/highcharts.js"></script>
+<script src="../../plugins/highcharts/highcharts-more.js"></script>
+<script src="../../plugins/highcharts/modules/exporting.js"></script>
+<script src="../../plugins/highcharts/modules/export-data.js"></script>
+<script src="../../plugins/highcharts/modules/accessibility.js"></script>
+
+<script>
+    $('#currentSquadPartial').load('@Html.Raw(@Url.Action("GetCurrentSquad", "Team", new { teamId = Model.ID }))', function () {
+        $('#playersTable').DataTable({
+            paging: false,
+            lengthChange: false,
+            searching: false,
+            ordering: true,
+            info: false,
+            autoWidth: true,
+            responsive: true,
+            order: [[1, "asc"]]
+        });
+    });
+
+    $('#leagueTableSnapshotPartial').load('@Html.Raw(@Url.Action("GetLeagueTableSnapshot", "Team", new { teamId = Model.ID }))');
+
+    $('#matchesPlayedPartial').load('@Html.Raw(@Url.Action("GetMatchesPlayed", "Team", new { teamId = Model.ID }))', function () {
+        $('#matchesTable').DataTable({
+            paging: true,
+            pageLength: 10,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            info: false,
+            autoWidth: true,
+            responsive: true,
+            order: [[1, "asc"]]
+        });
+    });
+
+    $('#playerCarriesPartial').load('@Html.Raw(@Url.Action("GetPlayerCarriesGraph", "Team", new { teamId = Model.ID }))');
+    $('#xgPartial').load('@Html.Raw(@Url.Action("GetGoalsVsXg", "Team", new { teamId = Model.ID }))');
+    $('#attackingPartial').load('@Html.Raw(@Url.Action("GetAttackingSummary", "Team", new { teamId = Model.ID }))');
+    $('#defensivePartial').load('@Html.Raw(@Url.Action("GetDefensiveSummary", "Team", new { teamId = Model.ID }))');
+</script>
+
+<style>
+    .list-group-item {
+        padding-top: 0.5em;
+    }
+
+    .table-image {
+        width: 1.2em
+    }
+</style>

@@ -1,0 +1,256 @@
+﻿@model AkriStat.ViewModels.Shortlist.ShortlistDetailsVM
+@using AkriStat.Constants
+
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+<link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" />
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+
+<div class="row">
+    <div class="col-12">
+        <h1 style="text-align:center">
+            <b>Shortlist: @Model.Heading</b>
+            @if (!Model.IsDefault)
+            {
+                <button class="btn btn-primary float-right" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="true" aria-controls="collapseEdit">
+                    <i class="fas fa-edit"></i>
+                </button>
+            }
+        </h1>
+        <div class="row">
+            <div class="col-6" style="text-align:center">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.CreatedDate):
+                    @Html.DisplayFor(x => x.CreatedDate)
+                </div>
+            </div>
+            <div class="col-6" style="text-align:center">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.LastUpdatedDate):
+                    @Html.DisplayFor(x => x.LastUpdatedDate)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div id="accordion">
+            <div class="card card-primary">
+                <div id="collapseEdit" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
+                    @using (Html.BeginForm("Edit", "Shortlist", FormMethod.Post))
+                    {
+                        <div class="card-body">
+                            <input type="hidden" asp-for="ID" />
+                            <input type="hidden" asp-for="Heading" />
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label asp-for="Name"></label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-danger float-left" data-toggle="modal" data-target="#confirmDeletionModal" style="color:#ffffff">
+                                <i class="fas fa-trash-alt"></i> Delete Shortlist
+                            </a>
+                            <button class="btn btn-success float-right" type="submit">Save</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Deletion Modal -->
+    <div class="modal fade" id="confirmDeletionModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeletionModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="display: block">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="confirmDeletionModalLabel">Are you sure you want to delete @Model.Name?</h4>
+                </div>
+                <div class="modal-footer align-middle">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-success" asp-action="Delete" asp-controller="Shortlist" asp-route-id="@Model.ID">Yes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                        <button class="btn btn-danger form-control" id="btnRemoveSelected" style="overflow:hidden">Remove Selected</button>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                        <button class="btn btn-info form-control" id="btnCompareSelected" style="overflow:hidden">Compare Selected</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div id="shortlistViewerPartial"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-uk.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.22/sorting/numeric-comma.js"></script>
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+<script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+@if (ViewBag.MessageToDisplay != null)
+{
+    <script>
+        toastr.success('@ViewBag.MessageToDisplay');
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        setBackButton('All Shortlists', '/Shortlists');
+
+        loadDataTable();
+
+        $('#btnRemoveSelected').click(function () {
+            let table = $('#tblShortlistedPlayers').DataTable();
+            ids = [];
+            // get selected datatables rows
+            table.rows({ selected: true }).data().each(function (val) {
+                ids.push(parseInt(val[0]));
+            });
+
+            if (ids.length < 1) {
+                toastr.error('No players selected to remove.');
+            }
+            else {
+                let _shortlistId = '@Model.ID';
+                $.ajax({
+                    type: "GET",
+                    url: "/Player/RemoveFromShortlist",
+                    data: { playerIds: ids, shortlistId: _shortlistId },
+                    traditional: true,
+                    success: function (response) {
+                        loadDataTable();
+                        toastr.success(response.playerRemoved + ' removed from shortlist: <a asp-controller="Shortlist" asp-action="View" asp-route-id="' + response.shortlistId + '">' + response.shortlistName + '</a>');
+                    },
+                    error: function (responese) {
+                        alert("Error. Contact site admin");
+                    }
+                });
+            }
+        });
+
+        $('#btnCompareSelected').click(function () {
+            let table = $('#tblShortlistedPlayers').DataTable();
+            ids = [];
+            // get selected datatables rows
+            table.rows({ selected: true }).data().each(function (val) {
+                ids.push(parseInt(val[0]));
+            });
+
+            if (ids.length < 2) {
+                toastr.error('A minimum of 2 players must be selected to compare.');
+            }
+            else if (ids.length > 6) {
+                toastr.error('A maximum of 6 players can be compared at once.');
+            }
+            else {
+
+                let form = document.createElement('form');
+                document.body.appendChild(form);
+                form.method = 'POST';
+                form.action = '/CompareResults'
+
+                for (var i = 0; i < ids.length; i++) {
+                    let idInput = document.createElement('input');
+                    idInput.type = 'hidden';
+                    idInput.name = 'ChosenPlayerSeasons[' + i + '].ID';
+                    idInput.value = ids[i];
+                    let seasonInput = document.createElement('input');
+                    seasonInput.type = 'hidden';
+                    seasonInput.name = 'ChosenPlayerSeasons[' + i + '].Season';
+                    seasonInput.value = '@SiteProperties.CurrentSeason';
+                    form.appendChild(idInput);
+                    form.appendChild(seasonInput);
+                }
+                console.log(form);
+                form.submit();
+            }
+        });
+    });
+
+    function loadDataTable() {
+        let shortlistId = '@Model.ID';
+        $.ajax({
+            type: "GET",
+            url: "/Shortlist/GetShortlist",
+            data: { id: shortlistId },
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $('#shortlistViewerPartial').html(response);
+                $('#tblShortlistedPlayers').DataTable({
+                    dom: 'Bfrtip',
+                    order: [[2, "asc"]],
+                    lengthChange: true,
+                    searching: false,
+                    ordering: true,
+                    info: false,
+                    autoWidth: true,
+                    responsive: true,
+                    columnDefs: [
+                        { visible: false, targets: 0, searchable: false },
+                        {
+                            checkboxes:
+                            {
+                                selectRow: true
+                            },
+                            orderable: false,
+                            targets: 1
+                        },
+                        { type: "currency", targets: 6 },
+                        { type: "dModelte-uk", targets: 7 },
+                        { orderable: false, targets: 8 }
+                    ],
+                    select:
+                    {
+                        style: "multi"
+                    }
+                });
+            },
+            error: function (responese) {
+                alert("Error. Contact site admin");
+            }
+        });
+    }
+
+    function removeFromShortlist(playerId) {
+        let _shortlistId = $('#shortlistSelect').find(':selected').val();
+        $.ajax({
+            type: "GET",
+            url: "/Player/RemoveFromShortlist",
+            data: { playerIds: playerId, shortlistId: _shortlistId },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                loadDataTable();
+                toastr.success(response.playerName + ' removed from shortlist: <a asp-controller="Shortlist" asp-action="View" asp-route-id="' + response.shortlistId + '">' + response.shortlistName + '</a>');
+            },
+            error: function (responese) {
+                alert("Error. Contact site admin");
+            }
+        });
+    }
+</script>

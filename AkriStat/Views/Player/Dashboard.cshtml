@@ -1,0 +1,203 @@
+﻿@model AkriStat.ViewModels.Player.Dashboard.PlayerDashboardVM
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+<link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" />
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="attacking-tab" data-toggle="tab" href="#attacking" role="tab" aria-controls="attacking" aria-selected="true">Attacking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="passing-tab" data-toggle="tab" href="#passing" role="tab" aria-controls="passing" aria-selected="false">Passing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="possession-tab" data-toggle="tab" href="#possession" role="tab" aria-controls="possession" aria-selected="false">Possession</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="defensive-tab" data-toggle="tab" href="#defensive" role="tab" aria-controls="defensive" aria-selected="false">Defensive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="keeper-tab" data-toggle="tab" href="#keeper" role="tab" aria-controls="keeper" aria-selected="false">Goalkeeper</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="attacking" role="tabpanel" aria-labelledby="attacking-tab">
+                        @await Html.PartialAsync("PlayerDashboard/_AttackingTable", Model.AttackingStatistics)
+                    </div>
+                    <div class="tab-pane fade" id="passing" role="tabpanel" aria-labelledby="passing-tab">
+                    </div>
+                    <div class="tab-pane fade" id="possession" role="tabpanel" aria-labelledby="possession-tab">
+                        <div id="possessionPartial"></div>
+                    </div>
+                    <div class="tab-pane fade" id="defensive" role="tabpanel" aria-labelledby="defensive-tab">
+                        <div id="defensivePartial"></div>
+                    </div>
+                    <div class="tab-pane fade" id="keeper" role="tabpanel" aria-labelledby="keeper-tab">
+                        <div id="keeperPartial"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Minutes Played ></span>
+                            </div>
+                            <input type="number" id="minsPlayed" class="form-control" min="200" max="4000" step="50" value="850">
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <a asp-controller="AdvancedSearch" asp-action="GetSearch" class="btn btn-default float-right">
+                            <i class="nav-icon fas fa-search"></i> Advanced Search
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+<script>
+    renderAttackingDataTable();
+
+    $('#passing-tab').click(function () {
+        if (!$('#tblPassing').length > 0) {
+            let minsPlayed = $(this).val();
+
+            $('#passing').load('@Url.Action("GetPassingPartial", "Player")?minutesPlayed=' + minsPlayed, function () {
+                renderPassingDataTable();
+            });
+        }
+    });
+
+    $('#possession-tab').click(function () {
+        if (!$('#tblPossession').length > 0) {
+            let minsPlayed = $(this).val();
+
+            $('#possession').load('@Url.Action("GetPossessionPartial", "Player")?minutesPlayed=' + minsPlayed, function () {
+                renderPossessionDataTable();
+            });
+        }
+    });
+
+    $('#defensive-tab').click(function () {
+        if (!$('#tbldefensive').length > 0) {
+            let minsPlayed = $(this).val();
+
+            $('#defensive').load('@Url.Action("GetDefensivePartial", "Player")?minutesPlayed=' + minsPlayed, function () {
+                renderDefensiveDataTable();
+            });
+        }
+    });
+
+    $('#minsPlayed').change(function () {
+        let minsPlayed = $(this).val();
+        let activeTabId = $('[class="tab-pane fade active show"]').attr('id');
+        if (activeTabId == 'attacking') {
+            $('#attacking').load('@Url.Action("GetAttackingPartial", "Player")?minutesPlayed=' + minsPlayed, function () {
+                renderAttackingDataTable();
+            });
+        }
+        else if (activeTabId == 'passing') {
+            $('#passing').load('@Url.Action("GetPassingPartial", "Player")?minutesPlayed=' + minsPlayed, function () {
+                renderPassingDataTable();
+            });
+        }
+        else if (activeTabId == 'possession') {
+            $('#possession').load('@Url.Action("GetPossessionPartial", "Player")?minutesPlayed=' + minsPlayed, function () {
+                renderPossessionDataTable();
+            });
+        }
+        else if (activeTabId == 'defensive') {
+            $('#defensive').load('@Url.Action("GetDefensivePartial", "Player")?minutesPlayed=' + minsPlayed, function () {
+                renderDefensiveDataTable();
+            });
+        }
+    });
+
+    $('#statsType').change(function () {
+        let per90 = $(this).val() == 'per 90';
+        renderAttackingDataTable(per90);
+    });
+
+    function renderAttackingDataTable() {
+        try {
+            $('#tblAttacking').DataTable().destroy();
+        } catch (e) { }
+
+        $('#tblAttacking').DataTable({
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+            lengthChange: false,
+            searching: false,
+            ordering: true,
+            info: false,
+            autoWidth: true,
+            responsive: true
+        });
+    }
+
+    function renderPassingDataTable() {
+        try {
+            $('#tblPassing').DataTable().destroy();
+        } catch (e) { }
+
+        $('#tblPassing').DataTable({
+            dom: 'Bfrtip',
+            order: [[4, "desc"]],
+            lengthChange: false,
+            searching: false,
+            ordering: true,
+            info: false,
+            autoWidth: true,
+            responsive: true
+        });
+    }
+
+    function renderPossessionDataTable() {
+        try {
+            $('#tblPossession').DataTable().destroy();
+        } catch (e) { }
+
+        $('#tblPossession').DataTable({
+            dom: 'Bfrtip',
+            order: [[2, "desc"]],
+            lengthChange: false,
+            searching: false,
+            ordering: true,
+            info: false,
+            autoWidth: true,
+            responsive: true
+        });
+    }
+
+    function renderDefensiveDataTable() {
+        try {
+            $('#tblDefensive').DataTable().destroy();
+        } catch (e) { }
+
+        $('#tblDefensive').DataTable({
+            dom: 'Bfrtip',
+            order: [[2, "desc"]],
+            lengthChange: false,
+            searching: false,
+            ordering: true,
+            info: false,
+            autoWidth: true,
+            responsive: true
+        });
+    }
+</script>

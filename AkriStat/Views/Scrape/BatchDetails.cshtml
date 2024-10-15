@@ -1,0 +1,124 @@
+﻿@model AkriStat.ViewModels.Scrape.BatchDetailsVM
+
+    <div class="form-center-lg">
+        <div class="row">
+            <div class="col-12">
+                <h1 style="text-align:center"><b>Batch Details</b></h1>
+                <div class="row">
+                    <div class="col-6" style="text-align:center">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.CreatedBy):
+                            @Html.DisplayFor(x => x.CreatedBy)
+                        </div>
+                    </div>
+                    <div class="col-6" style="text-align:center">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.CreatedDate):
+                            @Html.DisplayFor(x => x.CreatedDate)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="col-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        Jobs
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th width="1%">@Html.DisplayNameFor(model => model.Jobs[0].Successful)</th>
+                                    <th width="20%">Type</th>
+                                    <th width="20%">Criteria Entered</th>
+                                    <th width="60%">@Html.DisplayNameFor(model => model.Jobs[0].ErrorMessage)</th>
+                                    <th width="1%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Jobs)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (item.Successful.HasValue && item.Successful.Value)
+                                            {
+                                                <a>
+                                                    <i class="fas fa-check-circle fa-lg text-success"></i>
+                                                </a>
+                                            }
+                                            else if (item.Successful.HasValue && !item.Successful.Value)
+                                            {
+                                                <a>
+                                                    <i class="fas fa-times-circle fa-lg text-danger"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a>
+                                                    <i class="fas fa-spinner fa-lg fa-spin"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                        @if (item.FbRefID != null)
+                                        {
+                                            <td>FbRef ID</td>
+                                            <td>@Html.DisplayFor(x => item.FbRefID)</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Existing Player</td>
+                                            <td>@Html.DisplayFor(x => item.PlayerName)</td>
+                                        }
+                                        <td>@Html.DisplayFor(x => item.ErrorMessage)</td>
+                                        <td>
+                                            @if (item.Successful.HasValue && item.Successful.Value)
+                                            {
+                                                <a asp-action="DownloadImportCsv" asp-route-importId="@item.ImportID">
+                                                    <i class="fas fa-lg fa-file-csv"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>
+                                        <text class="text-success">@Model.Jobs.Where(x => x.Successful == true).Count()</text>/@Model.Jobs.Count()
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .table th {
+            text-align: center;
+        }
+
+        .table td {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        setBackButton('All Batches', '/Scrape/Batches');
+    </script>
+
+@if (Model.Jobs.Any(x => x.Successful == null))
+{
+    <script>
+        setTimeout(function () {
+            window.location.reload(1);
+        }, 10000);
+    </script>
+}

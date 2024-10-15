@@ -1,0 +1,281 @@
+﻿@model AkriStat.ViewModels.Player.PlayerMatchLogFullVM
+
+@using System.ComponentModel.DataAnnotations
+
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<div class="row">
+    <div class="col-12" style="text-align:center">
+        <h2 class="team-name">@Model.Name</h2>
+        <h5>@Model.PositionDisplay</h5>
+        @*<div class="row" style="padding-bottom:1%">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <select asp-for="Season" class="form-control" asp-items="Model.SeasonsSelectList">
+                        <option>2020</option>
+                    </select>
+                </div>
+                <div class="col-4"></div>
+            </div>*@
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                @if (Model.MatchLogs == null || Model.MatchLogs.Count() == 0)
+                {
+                    <h4 style="text-align:center">No Match Logs for Player</h4>
+                }
+                else
+                {
+                    <!-- Player Match Logs Table -->
+                    <table id="matchlogsTable" class="table table-sm table-hover" style="text-align:center">
+                        <thead>
+                            <tr>
+                                <th>Season</th>
+                                <th>Date</th>
+                                <th title="Competition" width="0%">C</th>
+                                <th title="Matchweek">MW</th>
+                                <th title="Home">H</th>
+                                <th title="Result">R</th>
+                                <th title="Away">A</th>
+                                <th title="Started">S</th>
+                                <th title="Position">Pn</th>
+                                <th title="Minutes Played">Min</th>
+                                <th title="Cards Shown">Cd</th>
+                                @foreach (var property in Model.MatchLogs.First().GetType().GetProperties())
+                                {
+                                    if (Model.ColumnsNotAutoDisplayed.Contains(property.Name))
+                                    {
+                                        continue;
+                                    }
+
+                                    var display = property.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault();
+                                    if (display != null)
+                                    {
+                                        var shortName = display.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals("ShortName") && x.GetValue(display) != null);
+                                        var displayName = display.GetType().GetProperties().FirstOrDefault(x => x.Name.Equals("Name") && x.GetValue(display) != null);
+
+                                        if (shortName != null && displayName != null)
+                                        {
+                                            <th title="@displayName.GetValue(display).ToString()">@shortName.GetValue(display).ToString()</th>
+                                        }
+                                        else if (shortName != null)
+                                        {
+                                            <th>@shortName.GetValue(display).ToString()</th>
+                                        }
+                                        else if (displayName != null)
+                                        {
+                                            <th>@displayName.GetValue(display).ToString()</th>
+                                        }
+                                        else
+                                        {
+                                            <th>@property.Name</th>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <th>@property.Name</th>
+                                    }
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.MatchLogs.Count(); i++)
+                            {
+                                var log = Model.MatchLogs[i];
+                                var competitionLogo = $"/dist/img/competition_logos/{@log.CompetitionId}.svg";
+                                var teamOneCrest = $"/dist/img/club_crests/{@log.TeamOneId}.svg";
+                                var teamTwoCrest = $"/dist/img/club_crests/{@log.TeamTwoId}.svg";
+                                <tr>
+                                    <td>@log.Season</td>
+                                    <td>@log.Date.ToString("dd/MM/yy")</td>
+                                    <td>
+                                        <a asp-controller="League" asp-action="Details" asp-route-id="@log.CompetitionId">
+                                            <img style="height:20px" src=@competitionLogo title="@log.CompetitionName" />
+                                        </a>
+                                    </td>
+                                    <td>@log.Round.Replace("Matchweek ", "")</td>
+                                    <td>
+                                        <a asp-controller="Team" asp-action="Details" asp-route-id="@log.TeamOneId">
+                                            <img height="20" style="max-width:40px" src=@teamOneCrest />
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @if (log.Result.Equals("W"))
+                                        {
+                                            <a asp-controller="Match" asp-route-id="@log.MatchId">
+                                                <span class="badge bg-success">@log.Score</span>
+                                            </a>
+                                        }
+                                        else if (log.Result.Equals("L"))
+                                        {
+                                            <a asp-controller="Match" asp-route-id="@log.MatchId">
+                                                <span class="badge bg-danger">@log.Score</span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="Match" asp-route-id="@log.MatchId">
+                                                <span class="badge bg-gray-light">@log.Score</span>
+                                            </a>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Team" asp-action="Details" asp-route-id="@log.TeamTwoId">
+                                            <img height="20" style="max-width:40px" src=@teamTwoCrest />
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @if (log.Started)
+                                        {
+                                            <a>Y</a>
+                                        }
+                                        else
+                                        {
+                                            <a>N</a>
+                                        }
+                                    </td>
+                                    <td>@log.PositionPlayed.Replace("|", "/")</td>
+                                    <td>@log.MinutesPlayed</td>
+                                    <td>
+                                        @if (log.YellowCard)
+                                        {
+                                            <img style="height:20px" src="/dist/img/yellow_card.svg" title="Yellow Card" />
+                                        }
+                                        else if (log.TwoYellowCards)
+                                        {
+                                            <img style="height:20px" src="/dist/img/two_yellow_cards.svg" title="Two Yellow Cards" />
+                                        }
+                                        else if (log.RedCard)
+                                        {
+                                            <img style="height:20px" src="/dist/img/red_card.svg" title="Red Card" />
+                                        }
+                                    </td>
+                                    @foreach (var property in Model.MatchLogs[i].GetType().GetProperties())
+                                    {
+                                        if (Model.ColumnsNotAutoDisplayed.Contains(property.Name))
+                                        {
+                                            continue;
+                                        }
+
+                                        if (property.Name.Contains("Percentage"))
+                                        {
+                                            var value = (decimal)property.GetValue(Model.MatchLogs[i]);
+                                            <td>
+                                                @String.Format("{0:0}", value)
+                                            </td>
+                                        }
+                                        else if (property.PropertyType.FullName.Contains("Decimal"))
+                                        {
+                                            var value = (decimal)property.GetValue(Model.MatchLogs[i]);
+                                            <td>
+                                                @String.Format("{0:0.00}", value)
+                                            </td>
+                                        }
+                                        else if (property.PropertyType.FullName.Contains("Bool"))
+                                        {
+                                            @if ((bool)property.GetValue(Model.MatchLogs[i]))
+                                            {
+                                                <td>Y</td>
+                                            }
+                                            else
+                                            {
+                                                <td>N</td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td>@property.GetValue(Model.MatchLogs[i])</td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot style="text-align:center">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>@Model.MatchLogs.Select(x => x.Started).Where(x => x == true).Count()/@Model.MatchLogs.Count()</td>
+                                <td></td>
+                                <td>@Model.MatchLogs.Select(x => x.MinutesPlayed).Sum()</td>
+                                <td></td>
+                                @foreach (var property in Model.MatchLogs.First().GetType().GetProperties())
+                                {
+                                    if (Model.ColumnsNotAutoDisplayed.Contains(property.Name))
+                                    {
+                                        continue;
+                                    }
+
+                                    if (property.Name.Contains("Percentage"))
+                                    {
+                                        var value = Model.MatchLogs.Select(x => (decimal)property.GetValue(x)).Average();
+                                        <td title="Average">
+                                            @String.Format("{0:0}", value)%
+                                        </td>
+                                    }
+                                    else if (property.PropertyType.FullName.Contains("Decimal"))
+                                    {
+                                        var value = Model.MatchLogs.Select(x => (decimal)property.GetValue(x)).Sum();
+                                        <td title="Sum">
+                                            @String.Format("{0:0.00}", value)
+                                        </td>
+                                    }
+                                    else if (property.PropertyType.FullName.Contains("Int"))
+                                    {
+                                        var value = Model.MatchLogs.Select(x => Convert.ToInt32(property.GetValue(x))).Sum();
+                                        <td title="Sum">@value</td>
+                                    }
+                                    else
+                                    {
+                                        <td>-</td>
+                                    }
+
+                                }
+                            </tr>
+                        </tfoot>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-uk.js"></script>
+
+<script>
+    setBackButton('Player', '/Players/@Model.ID.ToString()');
+</script>
+
+
+@if (Model.MatchLogs != null && Model.MatchLogs.Count() > 0)
+{
+    <script>
+        $('#matchlogsTable').DataTable({
+            scrollX: true,
+            paging: false,
+            lengthChange: false,
+            searching: false,
+            ordering: false,
+            info: false,
+            autoWidth: true,
+            responsive: false,
+            order: [[1, "asc"]],
+            columnDefs: [
+                { visible: false, searchable: true, targets: 0 },
+                { type: "date-uk", targets: 1 }
+            ]
+        });
+    </script>
+}

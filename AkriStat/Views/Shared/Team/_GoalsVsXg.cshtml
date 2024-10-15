@@ -1,0 +1,68 @@
+﻿@model List<AkriStat.ViewModels.Team.Summary.GoalsVsXgVM>
+
+<figure class="highcharts-figure">
+    <div id="goalsVsXgChart"></div>
+</figure>
+
+<script>
+    Highcharts.chart('goalsVsXgChart', {
+        credits: {
+            enabled: false
+        },
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Goals vs xG'
+        },
+        subtitle: {
+            text: '2019-20'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+        xAxis: {
+            categories: @Html.Raw(Json.Serialize(Model.Select(x => x.Round).ToArray())),
+            title: {
+                text: 'Matchweek'
+            },
+            labels: {
+                formatter: function () {
+                    var label = this.axis.defaultLabelFormatter.call(this);
+
+                    label = label.replace("Matchweek ", "");
+                    return label;
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                enabled: false
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: false
+                },
+                enableMouseTracking: true
+            }
+        },
+        series: [{
+            name: 'Goals',
+            data: @Html.Raw(Json.Serialize(Model.Select(x => x.Goals).ToArray()))
+        }, {
+            name: 'xG',
+            data: @Html.Raw(Json.Serialize(Model.Select(x => x.Xg).ToArray()))
+        }],
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 1000
+                }
+            }]
+        }
+    });
+</script>

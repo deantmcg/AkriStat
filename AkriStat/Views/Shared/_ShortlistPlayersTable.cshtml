@@ -1,0 +1,38 @@
+﻿@model List<AkriStat.ViewModels.Shortlist.ShortlistedPlayerLineVM>
+
+<table class="table table-sm table-hover table-dt-default" id="tblShortlistedPlayers">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th width="3%"></th>
+            <th>Player</th>
+            <th>Position</th>
+            <th>Foot</th>
+            <th>Age</th>
+            <th>Value</th>
+            <th>Contract</th>
+            <th width="3%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>@player.ID</td>
+                <td></td>
+                <td><a asp-controller="Player" asp-action="Details" asp-route-id="@player.ID">@player.Name</a></td>
+                <td>@player.Position</td>
+                <td>@player.Footed</td>
+                <td>@player.Age</td>
+                @*<td>@Html.DisplayFor(x => player.Value)</td>*@
+                <td>@player.ValueString</td>
+                <td>@Html.DisplayFor(x => player.ContractExpiry)</td>
+                <td>
+                    <a onclick="removeFromShortlist(@player.ID)" value="@player.ID" role="button" style="color:red; cursor:pointer">
+                        <i class="fas fa-minus-square"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

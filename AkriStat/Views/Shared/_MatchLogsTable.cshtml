@@ -1,0 +1,186 @@
+﻿@model List<AkriStat.ViewModels.Player.PlayerMatchLogVM>
+
+
+
+<table id="matchlogsTable" class="display compact nowrap" style="text-align:center">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th title="Competition" width="0%">C</th>
+            <th title="Matchweek">MW</th>
+            <th title="Home">H</th>
+            <th title="Result">R</th>
+            <th title="Away">A</th>
+            <th title="Started">S</th>
+            <th title="Position">Pn</th>
+            <th title="Minutes Played">Min</th>
+            <th title="Goals">G</th>
+            <th title="Assists">A</th>
+            <th title="Shots">Sh</th>
+            <th title="Shots on Target">SoT</th>
+            <th title="Cards Shown">Cd</th>
+            <th title="Touches">Tch</th>
+            <th title="Presses">Prs</th>
+            <th title="Players Tackled and Interceptions">T+I</th>
+            <th title="Blocks">Blk</th>
+            <th title="Expected Goals">xG</th>
+            <th title="Non-Penalty Expected Goals">npxG</th>
+            <th title="xG Assisted">xA</th>
+            <th title="Shot Creating Actions">SCA</th>
+            <th title="Goal Creating Actions">GCA</th>
+            <th title="Pass Completion Percentage">PCm%</th>
+            <th title="Progressive Passing Distance: Yards ball has been passed towards opponents goal">Prog</th>
+            <th title="Carries">Car</th>
+            <th title="Progressive Carry Distance: Yards ball has been carried towards opponents goal">Prog</th>
+            <th title="Dribbles Completed">DrCm</th>
+            <th title="Dribbles Attempted">DrAt</th>
+            <th title="Dribble Completion Percentage">DrCm%</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Iterates Through Each Matchlog -->
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var log = Model[i];
+            var competitionLogo = $"/dist/img/competition_logos/{@log.CompetitionId}.svg";
+            var teamOneCrest = $"/dist/img/club_crests/{@log.TeamOneId}.svg";
+            var teamTwoCrest = $"/dist/img/club_crests/{@log.TeamTwoId}.svg";
+            <tr>
+                <td>@log.Date.ToString("dd/MM/yy")</td>
+                <td>
+                    <a asp-controller="League" asp-action="Details" asp-route-id="@log.CompetitionId">
+                        <img style="height:20px" src=@competitionLogo title="@log.CompetitionName" />
+                    </a>
+                </td>
+                <td>@log.Round.Replace("Matchweek ", "")</td>
+                <td>
+                    <a asp-controller="Team" asp-action="Details" asp-route-id="@log.TeamOneId">
+                        <img height="20" style="max-width:40px" src=@teamOneCrest />
+                    </a>
+                </td>
+                <td>
+                    @if (log.Result.Equals("W"))
+                    {
+                        <a asp-controller="Match" asp-route-id="@log.MatchId">
+                            <span class="badge bg-success">@log.Score</span>
+                        </a>
+                    }
+                    else if (log.Result.Equals("L"))
+                    {
+                        <a asp-controller="Match" asp-route-id="@log.MatchId">
+                            <span class="badge bg-danger">@log.Score</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Match" asp-route-id="@log.MatchId">
+                            <span class="badge bg-gray-light">@log.Score</span>
+                        </a>
+                    }
+                </td>
+                <td>
+                    <a asp-controller="Team" asp-action="Details" asp-route-id="@log.TeamTwoId">
+                        <img height="20" style="max-width:40px" src=@teamTwoCrest />
+                    </a>
+                </td>
+                <td>
+                    @if (log.Started)
+                    {
+                        <a>Y</a>
+                    }
+                    else
+                    {
+                        <a>N</a>
+                    }
+                </td>
+                <td>@log.PositionPlayed.Replace("|", "/")</td>
+                <td>@log.MinutesPlayed</td>
+                <td>@log.Goals</td>
+                <td>@log.Assists</td>
+                <td>@log.Shots</td>
+                <td>@log.ShotsOnTarget</td>
+                <td>
+                    @if (log.YellowCard)
+                    {
+                        <img style="height:20px" src="/dist/img/yellow_card.svg" title="Yellow Card" />
+                    }
+                    else if (log.TwoYellowCards)
+                    {
+                        <img style="height:20px" src="/dist/img/two_yellow_cards.svg" title="Two Yellow Cards" />
+                    }
+                    else if (log.RedCard)
+                    {
+                        <img style="height:20px" src="/dist/img/red_card.svg" title="Red Card" />
+                    }
+                </td>
+                <td>@log.Touches</td>
+                <td>@log.Pressures</td>
+                <td>@log.PlayersTackledAndInterceptions</td>
+                <td>@log.Blocks</td>
+                <td>@Html.DisplayFor(m => m[i].Xg)</td>
+                <td>@Html.DisplayFor(m => m[i].NonPenaltyXg)</td>
+                <td>@Html.DisplayFor(m => m[i].Xgassisted)</td>
+                <td>@log.ShotCreatingActions</td>
+                <td>@log.GoalCreatingActions</td>
+                <td>@Html.DisplayFor(m => m[i].PassesCompletedPercentage)</td>
+                <td>@log.YardsPassedProgressive</td>
+                <td>@log.ControlledBallWithFeet</td>
+                <td>@log.YardsProgressiveControlledWithFeet</td>
+                <td>@log.SuccessfulDribbles</td>
+                <td>@log.DribblesAttempted</td>
+                <td>@Html.DisplayFor(m => m[i].SuccessfulDribblesPercentage)</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>(@Model.Select(x => x.Started).Where(x => x == true).Count()/@Model.Count())</td>
+            <td></td>
+            <td>@Model.Select(x => x.MinutesPlayed).Sum()</td>
+            <td>@Model.Select(x => x.Goals).Sum()</td>
+            <td>@Model.Select(x => x.Assists).Sum()</td>
+            <td>@Model.Select(x => x.Shots).Sum()</td>
+            <td>@Model.Select(x => x.ShotsOnTarget).Sum()</td>
+            <td></td>
+            <td>@Model.Select(x => x.Touches).Sum()</td>
+            <td>@Model.Select(x => x.Pressures).Sum()</td>
+            <td>@Model.Select(x => x.PlayersTackledAndInterceptions).Sum()</td>
+            <td>@Model.Select(x => x.Blocks).Sum()</td>
+            <td>@Math.Round(Model.Select(x => x.Xg).Sum(), 2)</td>
+            <td>@Math.Round(Model.Select(x => x.NonPenaltyXg).Sum(), 2)</td>
+            <td>@Math.Round(Model.Select(x => x.Xgassisted).Sum(), 2)</td>
+            <td>@Model.Select(x => x.ShotCreatingActions).Sum()</td>
+            <td>@Model.Select(x => x.GoalCreatingActions).Sum()</td>
+            <td title="Average">@Math.Round(Model.Select(x => x.PassesCompletedPercentage).Average(), 2)</td>
+            <td>@Model.Select(x => x.YardsPassedProgressive).Sum()</td>
+            <td>@Model.Select(x => x.ControlledBallWithFeet).Sum()</td>
+            <td>@Model.Select(x => x.YardsProgressiveControlledWithFeet).Sum()</td>
+            <td>@Model.Select(x => x.SuccessfulDribbles).Sum()</td>
+            <td>@Model.Select(x => x.DribblesAttempted).Sum()</td>
+            <td title="Average">@Math.Round(Model.Select(x => x.SuccessfulDribblesPercentage).Average(), 2)</td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+    $('#matchlogsTable').DataTable({
+        scrollX: true,
+        paging: false,
+        lengthChange: false,
+        searching: false,
+        ordering: true,
+        info: false,
+        autoWidth: true,
+        responsive: false,
+        order: [[0, "asc"]],
+        columnDefs: [
+            { type: "date-uk", targets: 0 }
+        ]
+    });
+</script>

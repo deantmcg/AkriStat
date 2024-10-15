@@ -1,0 +1,56 @@
+﻿@model List<AkriStat.Models.MatchTeamStats>
+
+<table id="matchesTable" class="table table-sm table-hover" style="text-align:center; width:100%; margin-top: 0px !important">
+    <thead>
+        <tr>
+            <th width="25%">Date</th>
+            <th width="25%">
+                <abbr title="Opponent">Opp</abbr>
+            </th>
+            <th width="25%">
+                Venue
+            </th>
+            <th width="25%">
+                Result
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var match in Model)
+        {
+            string opponentCrest;
+            int opponentId;
+            @if (match.HomeTeamID == ViewBag.TeamID)
+            {
+                opponentCrest = $"/dist/img/club_crests/{match.TeamTwoID}.svg";
+                opponentId = match.TeamTwoID;
+            }
+            else
+            {
+                opponentCrest = $"/dist/img/club_crests/{match.TeamOneID}.svg";
+                opponentId = match.TeamOneID;
+            }
+            <tr>
+                <td>@match.Date.ToString("dd MMM")</td>
+                <td>
+                    <a asp-controller="Team" asp-action="Details" asp-route-id="@opponentId">
+                        <img style="transform: scale(0.6); height:2rem" alt="Avatar" src="@opponentCrest">
+                    </a>
+                </td>
+                <td>
+                    @if (match.HomeTeamID == ViewBag.TeamID)
+                    {
+                        <a>H</a>
+                    }
+                    else
+                    {
+                        <a>A</a>
+                    }
+                </td>
+                <td>
+                    @match.TeamOneGoals - @match.TeamTwoGoals
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

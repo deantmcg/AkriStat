@@ -1,0 +1,44 @@
+﻿@model AkriStat.ViewModels.Player.Summary.BarsVM
+
+<div class="progress-group">
+    <span class="progress-text">Clean Sheets</span>
+    <span class="float-right"><b>@Model.GkCleanSheets</b>/@Model.GamesPlayed</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-keeper" role="progressbar" style="width: @Model.GkCleanSheetsPercentage%" aria-valuenow="@Model.GkCleanSheets" aria-valuemin="0" aria-valuemax="@Model.GamesPlayed"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Penalties Saved</span>
+    <span class="float-right"><b>@Model.GkPenaltiesSaved</b>/@Model.GkPenaltiesFaced</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-keeper" role="progressbar" style="width: @Model.GkPenaltiesSavedPercentage%" aria-valuenow="@Model.GkPenaltiesSaved" aria-valuemin="0" aria-valuemax="@Model.GkPenaltiesFaced"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Passing Success</span>
+    <span class="float-right"><b>@Model.PassesCompleted</b>/@Model.PassesAttempted</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-keeper" role="progressbar" style="width: @Model.PassesCompletedPercentage%" aria-valuenow="@Model.PassesCompleted" aria-valuemin="0" aria-valuemax="@Model.PassesAttempted"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Passing Success >40 yds</span>
+    <span class="float-right"><b>@Model.GkPassesCompletedOver40Yards</b>/@Model.GkPassesAttemptedOver40Yards</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-keeper" role="progressbar" style="width: @Model.GkPassesCompletedOver40YardsPercentage%" aria-valuenow="@Model.GkPassesCompletedOver40Yards" aria-valuemin="0" aria-valuemax="@Model.GkPassesAttemptedOver40Yards"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Total Passes >40 yds</span>
+    <span class="float-right"><b>@Model.GkPassesAttemptedOver40Yards</b>/@Model.PassesAttempted</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-keeper" role="progressbar" style="width: @Model.GkPassesAttemptedOver40YardsPercentage%" aria-valuenow="@Model.GkPassesAttemptedOver40Yards" aria-valuemin="0" aria-valuemax="@Model.PassesAttempted"></div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text">Cross Stopping</span>
+    <span class="float-right"><b>@Model.GkCrossesStopped</b>/@Model.GkOpponentCrossesAttempted</span>
+    <div class="progress progress-sm">
+        <div class="progress-bar bg-keeper" role="progressbar" style="width: @Model.GkOpponentCrossesStoppedPercentage%" aria-valuenow="@Model.GkCrossesStopped" aria-valuemin="0" aria-valuemax="@Model.GkOpponentCrossesAttempted"></div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<AkriStat.ViewModels.Administrator.UserIndexVM>
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+
+<div class="form-center-lg">
+    <div class="row">
+        <div class="col-12">
+            <h1 style="text-align:center"><b>Users</b></h1>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="display hover row-border" id="tblUsers" style="width:100%; text-align:center">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Team</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr onclick="window.location.href = '/Admin/Users/@user.Id'" style="cursor: pointer">
+                                    <td>@user.FullName</td>
+                                    <td>@user.Role</td>
+                                    <td>@user.Team</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#tblUsers').DataTable({
+            dom: 'Bfrtip',
+            order: [[0, "asc"]],
+            lengthChange: true,
+            searching: true,
+            ordering: false,
+            info: false,
+            autoWidth: true,
+            responsive: true
+        });
+    });
+</script>

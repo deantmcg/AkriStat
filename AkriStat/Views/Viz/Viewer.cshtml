@@ -1,0 +1,220 @@
+﻿@model AkriStat.ViewModels.Viz.VizResultsVM
+
+<div class="row">
+    <div class="col-12">
+        @using (Html.BeginForm("EditCriteria", "Viz", FormMethod.Post))
+        {
+            <input type="hidden" name="Title" id="Title" value="@Model.Criteria.Title" />
+            <input type="hidden" name="Subtitle" id="Subtitle" value="@Model.Criteria.Subtitle" />
+            <input type="hidden" name="VizType" id="VizType" value="@Model.Criteria.VizType" />
+            <input type="hidden" name="Stacked" id="Stacked" value="@Model.Criteria.Stacked.ToString()" />
+            @for (int i = 0; i < Model.Criteria.PlayerIds.Count(); i++)
+            {
+                <input type="hidden" id="PlayerIds[@i]" name="PlayerIds[@i]" value="@Model.Criteria.PlayerIds[i]" />
+            }
+            @for (int i = 0; i < Model.Criteria.DataPoints.Count(); i++)
+            {
+                <input type="hidden" id="DataPoints[@i]" name="DataPoints[@i]" value="@Model.Criteria.DataPoints[i]" />
+            }
+            <input type="hidden" id="MinutesPlayed" name="MinutesPlayed" value="@Model.Criteria.MinutesPlayed" />
+            <button type="submit" class="btn btn-primary" id="btnEditViz">Edit</button>
+        }
+        <br />
+        <figure class="highcharts-figure">
+            <div id="chart"></div>
+        </figure>
+    </div>
+</div>
+
+<!-- Highcharts -->
+<script src="../../plugins/highcharts/highcharts.js"></script>
+<script src="../../plugins/highcharts/highcharts-more.js"></script>
+<script src="../../plugins/highcharts/modules/exporting.js"></script>
+<script src="../../plugins/highcharts/modules/export-data.js"></script>
+<script src="../../plugins/highcharts/modules/accessibility.js"></script>
+
+@if (Model.Criteria.VizType.Equals("scatter"))
+{
+    <script>
+        Highcharts.chart('chart', {
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: '@Model.Criteria.Title'
+            },
+            subtitle: {
+                text: '@Model.Criteria.Subtitle'
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: '@Model.Criteria.DataSelectList.FirstOrDefault(x => x.Value.Equals(Model.Criteria.DataPoints[0])).Text'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: '@Model.Criteria.DataSelectList.FirstOrDefault(x => x.Value.Equals(Model.Criteria.DataPoints[1])).Text'
+                }
+            },
+            legend: {
+                enabled: false,
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100,100,100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '',
+                        pointFormat: '<b>{point.name}</b><br>@Model.Criteria.DataSelectList.FirstOrDefault(x => x.Value.Equals(Model.Criteria.DataPoints[0])).Text: {point.x:.2f}<br>@Model.Criteria.DataSelectList.FirstOrDefault(x => x.Value.Equals(Model.Criteria.DataPoints[1])).Text: {point.y:.2f}'
+                    }
+                }
+            },
+            series: [{
+                data: @Html.Raw(Json.Serialize(Model.Data.Select(x => new { x = x.Data[0], y = x.Data[1], name = x.Name }).ToArray()))
+            }]
+        });
+    </script>
+}
+else if (Model.Criteria.VizType.Equals("bar"))
+{
+    <script>
+        Highcharts.chart('chart', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '@Model.Criteria.DataSelectList.FirstOrDefault(x => x.Value.Equals(Model.Criteria.DataPoints.First())).Text'
+            },
+            subtitle: {
+                text: '@Model.Criteria.Subtitle'
+            },
+            xAxis: {
+                categories: @Html.Raw(Json.Serialize(Model.Criteria.DataPoints.Select(x => Model.Criteria.DataSelectList.FirstOrDefault(y => y.Value.Equals(x)).Text).ToArray())),
+                title: {
+                    text: '@Model.Criteria.Title'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                   enabled: false
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+                pointFormat: '<b>{point.name}</b><br>{point.y:.2f}'
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function () {
+                            return this.y.toFixed(2);
+                        }
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: @Html.Raw(Json.Serialize(Model.Data.Select(x => new { name = x.Name, data = x.Data.ToArray() }).ToArray()))
+        });
+    </script>
+}
+else if (Model.Criteria.VizType.Equals("column"))
+{
+    var seriesData = new List<object>();
+
+
+    for (int i = 0; i < Model.Criteria.DataPoints.Count; i++)
+    {
+        seriesData.Add(new { name = Model.Criteria.DataPoints[i], data = Model.Data.Select(x => x.Data[i]).ToArray() });
+    }
+
+<script>
+    let options = {
+        chart: {
+            type: 'column',
+            options3d: {
+                enabled: true,
+                alpha: 0,
+                beta: 0,
+                depth: 20,
+                viewDistance: 25
+            },
+            reflow: false
+        },
+        credits: false,
+        title: {
+            text: '@Model.Criteria.Title'
+        },
+        subtitle: {
+            text: '@Model.Criteria.Subtitle'
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        plotOptions: {
+            column: {
+                colorByPoint: '@Model.Criteria.DataPoints.Count' == '1',
+                depth: 25,
+                softThreshold: false
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return this.key + ': ' + this.y;
+            }
+        },
+        xAxis: {
+            categories: @Html.Raw(Json.Serialize(Model.Data.Select(x => x.Name).ToArray())),
+        },
+        series: @Html.Raw(Json.Serialize(seriesData))
+    }
+
+    if ('@Model.Criteria.Stacked.ToString()' == 'True') {
+        options.plotOptions.column.stacking = 'normal';
+    }
+
+    Highcharts.chart('chart', options);
+</script>
+}

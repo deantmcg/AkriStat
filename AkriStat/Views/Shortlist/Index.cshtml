@@ -1,0 +1,78 @@
+﻿@model IEnumerable<AkriStat.ViewModels.Shortlist.ShortlistIndexVM>
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" />
+
+<div class="index-center">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 style="text-align:center"><b>Shortlists (@Model.Count())</b></h1>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                
+                <div class="col-md-12">
+                    <a class="btn btn-success" asp-action="Create">
+                        <i class="fas fa-plus"></i> New
+                    </a>
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-sm table-hover table-dt-default" id="tblShortlists">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th width="20%">Players</th>
+                                <th width="20%" style="white-space:nowrap">Last Updated</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var shortlist in Model)
+                            {
+                                <tr onclick="window.location.href = '/Shortlists/@shortlist.ID'" style="cursor: pointer">
+                                    <td>@shortlist.Name</td>
+                                    <td>@shortlist.PlayerCount</td>
+                                    <td>@Html.DisplayFor(x => shortlist.LastUpdatedDate)</td>
+                                    <td>@Html.DisplayFor(x => shortlist.CreatedDate)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-uk.js"></script>
+
+@if (ViewBag.MessageToDisplay != null)
+{
+    <script>
+        toastr.success('@ViewBag.MessageToDisplay');
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#tblShortlists').DataTable({
+            dom: 'Bfrtip',
+            order: [[2, "asc"]],
+            lengthChange: true,
+            searching: false,
+            ordering: true,
+            info: false,
+            autoWidth: true,
+            responsive: true,
+            columnDefs: [
+                { visible: false, type: "date-uk", targets: 3 },
+                { type: "date-uk", targets: 2 }
+            ]
+        });
+    });
+</script>

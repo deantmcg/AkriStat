@@ -1,0 +1,67 @@
+﻿@model List<AkriStat.Models.LeagueTableLines>
+
+<table class="table table-sm table-hover" style="text-align:center">
+    <thead>
+        <tr>
+            <th style="width:1%">#</th>
+            <th></th>
+            <th style="width:1%"><abbr title="Goal Difference">GD</abbr></th>
+            <th style="width: 1%"><abbr title="Points">Pts</abbr></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            if (Model[i].TeamID == ViewBag.TeamID)
+            {
+                int position;
+                if ((i + 1) <= 7)
+                {
+                    position = 1;
+                    for (int j = 0; j < 7; j++)
+                    {
+                        string crest = $"/dist/img/club_crests/{@Model[j].TeamID}.svg";
+                        <tr>
+                            <td>@position</td>
+                            <td><a asp-controller="Team" asp-action="Details" asp-route-id="@Model[j].TeamID">@Model[j].Name</a></td>
+                            <td>@Model[j].GoalDifference</td>
+                            <td>@Model[j].Points</td>
+                        </tr>
+                        position++;
+                    }
+                }
+                else if (i + 1 >= (Model.Count() - 7))
+                {
+                    for (int j = Model.Count() - 7; j < Model.Count(); j++)
+                    {
+                        string crest = $"/dist/img/club_crests/{@Model[j].TeamID}.svg";
+                        position = j + 1;
+                        <tr>
+                            <td>@position</td>
+                            <td><a asp-controller="Team" asp-action="Details" asp-route-id="@Model[j].TeamID">@Model[j].Name</a></td>
+                            <td>@Model[j].GoalDifference</td>
+                            <td>@Model[j].Points</td>
+                        </tr>
+                        position++;
+                    }
+                }
+                else
+                {
+                    for (int j = i - 3; j < i + 4; j++)
+                    {
+                        string crest = $"/dist/img/club_crests/{@Model[j].TeamID}.svg";
+                        position = j + 1;
+                        <tr>
+                            <td>@position</td>
+                            <td><a asp-controller="Team" asp-action="Details" asp-route-id="@Model[j].TeamID">@Model[j].Name</a></td>
+                            <td>@Model[j].GoalDifference</td>
+                            <td>@Model[j].Points</td>
+                        </tr>
+                        position++;
+                    }
+                }
+                break;
+            }
+        }
+    </tbody>
+</table>

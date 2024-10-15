@@ -1,0 +1,21 @@
+﻿@model List<Matches>
+
+<table id="matches" class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td><a asp-controller="Team" asp-action="Details" asp-route-id="@Model[i].TeamOneID">@Model[i].TeamOne.Name</a></td>
+                <td>@Model[i].TeamOneGoals - @Model[i].TeamTwoGoals</td>
+                <td><a asp-controller="Team" asp-action="Details" asp-route-id="@Model[i].TeamTwoID">@Model[i].TeamTwo.Name</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

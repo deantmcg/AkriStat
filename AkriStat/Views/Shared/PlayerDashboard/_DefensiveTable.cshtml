@@ -1,0 +1,32 @@
+﻿@model List<AkriStat.ViewModels.Player.Dashboard.PlayerDefensiveVM>
+
+<table class="table table-sm table-hover table-dt-default" id="tblDefensive" style="width:100%">
+    <thead>
+        <tr>
+            <th width="20%">Player</th>
+            <th>Tackles Won /90</th>
+            <th>Drbblrs Tackled %</th>
+            <th>Succ Pressure /90</th>
+            <th>Succ Pressure %</th>
+            <th>Blocks /90</th>
+            <th>Interceptions /90</th>
+            <th>Clearances /90</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            @*<tr onclick="window.location.href = '/Players/@player.ID'" style="cursor:pointer">*@
+            <tr onclick="window.open('/Players/@player.ID', '_blank')" style="cursor:pointer">
+                <td>@Html.DisplayFor(x => player.Name)</td>
+                <td>@Html.DisplayFor(x => player.TacklesWonPer90)</td>
+                <td>@Html.DisplayFor(x => player.DribblersTackledPercentage)</td>
+                <td>@Html.DisplayFor(x => player.SuccessfulPressuresPer90)</td>
+                <td>@Html.DisplayFor(x => player.SuccessfulPressuresPercentage)</td>
+                <td>@Html.DisplayFor(x => player.BlocksPer90)</td>
+                <td>@Html.DisplayFor(x => player.InterceptionsPer90)</td>
+                <td>@Html.DisplayFor(x => player.ClearancesPer90)</td>
+            </tr>
+        }
+    </tbody>
+</table>

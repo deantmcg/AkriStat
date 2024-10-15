@@ -1,0 +1,101 @@
+﻿@model AkriStat.ViewModels.League.LeagueDetailsVM
+
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<div class="form-center-lg">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="display-6">@Model.Name 2019/20</h1>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Standings
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <table id="leagueTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Team</th>
+                                <th>Played</th>
+                                <th>Won</th>
+                                <th>Drawn</th>
+                                <th>Lost</th>
+                                <th title="Goals For">GF</th>
+                                <th title="Goals Against">GA</th>
+                                <th title="Goal Difference">GD</th>
+                                <th title="Points per Game">PPG</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int x = 1; }
+                            @foreach (var item in Model.LeagueTableLines)
+                            {
+                                <tr>
+                                    <td>@x</td>
+                                    <td><a asp-controller="Team" asp-action="Details" asp-route-id="@item.TeamId">@item.Name</a></td>
+                                    <td>@item.GamesPlayed</td>
+                                    <td>@item.Wins</td>
+                                    <td>@item.Draws</td>
+                                    <td>@item.Losses</td>
+                                    <td>@item.GoalsScored</td>
+                                    <td>@item.GoalsConceded</td>
+                                    <td>@item.GoalDifference</td>
+                                    <td>@Html.DisplayFor(x => item.PointsPerGame)</td>
+                                    <td>@item.Points</td>
+                                </tr>
+                                x++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Matches
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <select class="form-control" id="selectMatchweek" asp-items="Model.Matchweeks"></select>
+                        <div id="matchesPartial"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+<script>
+    $(function () {
+        $('#leagueTablePartial').load('@Html.Raw(@Url.Action("GetLeagueTable", "League", new { @competitionId = Model.Id }))');
+        $('#matchesPartial').load('@Html.Raw(@Url.Action("GetMatches", "League", new { @competitionId = Model.Id, @matchweek = Model.Matchweeks.Last().Text }))');
+        $('#selectMatchweek').val('@Model.Matchweeks.Last().Text');
+
+        $('#leagueTable').DataTable({
+            "paging": false,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": false,
+        });
+    });
+
+    $('#selectMatchweek').change(function () {
+        let matchweek = $(this).val().replace(' ', '_');
+        $('#matchesPartial').load('@Url.Action("GetMatches", "League")?competitionId=' + '@Model.Id' + '&matchweek=' + matchweek);
+    });
+</script>

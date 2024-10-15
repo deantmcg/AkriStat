@@ -1,0 +1,475 @@
+﻿@model AkriStat.ViewModels.Player.PlayerDetailsVM
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icheck-bootstrap@3.0.1/icheck-bootstrap.min.css" />
+
+<div class="row">
+    <div class="col-12" style="text-align:center">
+        <h2 class="team-name">@Model.Name</h2>
+        <h5>@Model.Age - @Model.PositionDisplay</h5>
+    </div>
+    <div class="col-xl-4 col-lg-5">
+        <div class="card card-widget widget-profile">
+            @*<div class="widget-profile-header bg-forward">*@
+            <div class="widget-profile-header" style="background-color:@Model.PositionColourCode">
+                <div class="row" style="text-align:center">
+                    <div class="col-4">
+                        <a class="btn btn-default form-control" href="" data-toggle="modal" data-target="#playerShortlistsModal">
+                            <i class="far fa-clipboard"></i>
+                            Shortlists
+                        </a>
+                    </div>
+                    <div class="col-4">
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                        {
+                            <a class="btn btn-default form-control" asp-action="Edit" asp-route-id="@Model.ID">
+                                <i class="fas fa-user-edit"></i>
+                                Edit
+                            </a>
+                        }
+                    </div>
+                    <div class="col-4">
+                        <a class="btn btn-default form-control" asp-controller="Compare" asp-action="GetCompare" asp-route-playerIds="@Model.ID">
+                            <i class="fas fa-people-arrows"></i>
+                            Compare
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-profile-image">
+                @{ string facePicture = $"/dist/img/player_faces/{@Model.ID}.jpeg"; }
+                <img src="@facePicture" alt="@Model.Name" title="@Model.Name" style="border-radius:20%; border: solid; border-color: #fff"
+                     onerror="this.onerror=null; this.src='/dist/img/player_faces/default.jpeg'" />
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="description-block border-right">
+                            <h5 class="description-header"><img style="height:45px" src="@Model.NationalityFlag" title="@Model.Nationality" /></h5>
+                        </div>
+                    </div>
+                    @{ string teamCrest = $"/dist/img/club_crests/{@Model.ClubID}.svg"; }
+                    <div class="col-4">
+                        <div class="description-block border-right" onclick="window.location.href = '/Teams/@Model.ClubID'" style="cursor:pointer">
+                            <h5 class="description-header"><img style="height:45px" src=@teamCrest title="@Model.Club" /></h5>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="description-block">
+                            <h5 class="description-header">Value</h5>
+                            @*<span class="description-text">@Html.DisplayFor(x => x.Value)</span>*@
+                            <h3 style="font:bolder">@Model.ValueString</h3>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-4">
+                        <div class="description-block border-right">
+                            <h5 class="description-header" title="Appearances">App</h5>
+                            <span class="description-text">@Model.GamesPlayed</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="description-block border-right">
+                            <h5 class="description-header">Goals</h5>
+                            <span class="description-text">@Model.Goals</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="description-block">
+                            <h5 class="description-header">Assists</h5>
+                            <span class="description-text">@Model.Assists</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table">
+                            <tbody>
+                                @if (!string.IsNullOrEmpty(Model.FullName))
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Full name:</td>
+                                        <td style="text-align:left">@Model.FullName</td>
+                                    </tr>
+                                }
+                                @if (Model.DateOfBirth != null)
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Date of Birth:</td>
+                                        <td style="text-align:left">@Html.DisplayFor(model => Model.DateOfBirth)</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.PlaceOfBirth))
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Place of Birth:</td>
+                                        <td style="text-align:left">@Model.PlaceOfBirth</td>
+                                    </tr>
+                                }
+                                @if (Model.SecondNationality != null)
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Second Nationality:</td>
+                                        <td style="text-align:left">
+                                            <img style="height:15px" src="@Model.SecondNationalityFlag" title="@Model.SecondNationality" />
+                                        </td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Footed))
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Foot:</td>
+                                        <td style="text-align:left">@Model.Footed</td>
+                                    </tr>
+                                }
+                                @if (Model.HeightCm != null)
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Height:</td>
+                                        <td style="text-align:left">@Model.HeightCm.Value cm (@Model.HeightFt)</td>
+                                    </tr>
+                                }
+                                @if (Model.WeightKg != null)
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Weight:</td>
+                                        <td style="text-align:left">@Model.WeightKg.Value kg (@Model.WeightLbs lbs)</td>
+                                    </tr>
+                                }
+                                @if (Model.WeeklyWage != null)
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Wage:</td>
+                                        <td style="text-align:left">@Model.WeeklyWageString p/w</td>
+                                    </tr>
+                                }
+                                @if (Model.ContractExpiry != null)
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Contract Expires:</td>
+                                        <td style="text-align:left">@Html.DisplayFor(model => Model.ContractExpiry)</td>
+                                    </tr>
+                                }
+                                @if (new string[] { Model.TwitterUrl, Model.InstagramUrl, Model.FacebookUrl }.Any(x => !string.IsNullOrEmpty(x)))
+                                {
+                                    <tr>
+                                        <td class="td-title" style="text-align:right">Socials:</td>
+                                        <td style="text-align:left">
+                                            @if (Model.TwitterUrl != null)
+                                            {
+                                                <a target="_blank" href="@Model.TwitterUrl" style="color: #00ACEE;">
+                                                    <i class="fab fa-twitter fa-lg"></i>
+                                                </a>
+                                            }
+                                            @if (Model.FacebookUrl != null)
+                                            {
+                                                <a target="_blank" href="@Model.FacebookUrl" style="color: #3B5998">
+                                                    <i class="fab fa-facebook fa-lg"></i>
+                                                </a>
+                                            }
+                                            @if (Model.InstagramUrl != null)
+                                            {
+                                                <a target="_blank" href="@Model.InstagramUrl" style="color: #7F1734">
+                                                    <i class="fab fa-instagram fa-lg"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-outline" style="border-top: 3px solid @Model.PositionColourCode">
+            <div class="card-header">
+                Similar Players
+            </div>
+            <div class="card-body">
+                <div id="similarPlayersPartial"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Player Performace Summary Section -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card card-outline" style="border-top: 3px solid @Model.PositionColourCode">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Summary
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6" style="text-align:center">
+                        @if (Model.Position.Equals("GK"))
+                        {
+                            <div id="keeperPartial"></div>
+                        }
+                        else
+                        {
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">vs. Top 5 Leagues</span>
+                                </div>
+                                <!-- Radar Links -->
+                                <select class="form-control" id="summaryRadarSelect">
+                                    <option value="cd">Central Defenders</option>
+                                    <option value="fb">Full Backs</option>
+                                    <option value="cm">Central Midfielders</option>
+                                    <option value="am-winger">Attacking Midfielders & Wingers</option>
+                                    <option value="fw">Forwards</option>
+                                </select>
+                            </div>
+                            <!-- Summary Radar Charts -->
+                            <div class="tab-content" id="vert-tabs-right-tabContent">
+                                <div class="tab-pane fade" id="tabs-fb" role="tabpanel" aria-labelledby="tabs-fb">
+                                    <div id="fullBackPartial"></div>
+                                </div>
+                                <div class="tab-pane fade" id="tabs-cd" role="tabpanel" aria-labelledby="tabs-cd-tab">
+                                    <div id="centralDefenderPartial"></div>
+                                </div>
+                                <div class="tab-pane fade" id="tabs-cm" role="tabpanel" aria-labelledby="tabs-cm-tab">
+                                    <div id="centralMidfielderPartial"></div>
+                                </div>
+                                <div class="tab-pane fade" id="tabs-am-winger" role="tabpanel" aria-labelledby="tabs-am-winger-tab">
+                                    <div id="attackingMidAndWingerPartial"></div>
+                                </div>
+                                <div class="tab-pane fade" id="tabs-fw" role="tabpanel" aria-labelledby="tabs-fw-tab">
+                                    <div id="strikerPartial"></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6">
+                        <!-- Summary Bars -->
+                        <div id="barsPartial"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card -->
+        </div>
+        <div class="card card-outline" style="border-top: 3px solid @Model.PositionColourCode">
+            <div class="card-header">
+                Match Logs
+                <a class="float-right" asp-action="MatchLogs" asp-route-id="@Model.ID">Full</a>
+            </div>
+            <div class="card-body">
+                <div id="matchLogsPartial"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Shortlists Modal -->
+    <div class="modal fade" id="playerShortlistsModal" tabindex="-1" role="dialog" aria-labelledby="playerShortlistsModalLabel" style="padding-right:0px!important">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="display: block">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="playerShortlistsModalLabel">Shortlists: @Model.Name</h4>
+                </div>
+                <div class="modal-body" style="margin:0 auto">
+                    <div class="row">
+                        <div class="col-12">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                for (int i = 0; i < Model.Shortlists.Count(); i++)
+                                {
+                                    string inputId = "shortlist" + Model.Shortlists[i].ID.ToString();
+                                    if (Model.Shortlists[i].PlayerIncluded)
+                                    {
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox" id=@inputId checked>
+                                                <label for=@inputId>@Model.Shortlists[i].Name</label>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox" id=@inputId>
+                                                <label for=@inputId>@Model.Shortlists[i].Name</label>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <h4 style="text-align:center">Please <a id="login" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path">Login</a> to use shortlists.</h4>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="text-success mr-auto" asp-controller="Shortlists" asp-action="Create" asp-route-returnUrl="@Context.Request.Path">
+                            <i class="fas fa-plus"></i>
+                            Create New Shortlist
+                        </a>
+                    }
+                    <button type="button" class="btn btn-default float-right" data-dismiss="modal">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/date-uk.js"></script>
+<!-- Highcharts -->
+<script src="../../plugins/highcharts/highcharts.js"></script>
+<script src="../../plugins/highcharts/highcharts-more.js"></script>
+<script src="../../plugins/highcharts/modules/exporting.js"></script>
+<script src="../../plugins/highcharts/modules/export-data.js"></script>
+<script src="../../plugins/highcharts/modules/accessibility.js"></script>
+
+<script>
+    setBackButton('All Players', '/Players');
+
+    $(function () {
+        $('#matchLogsPartial').load('@Html.Raw(@Url.Action("GetCombinedMatchLogs", "Player", new { @playerId = Model.ID }))');
+        $('#similarPlayersPartial').load('@Html.Raw(@Url.Action("GetSimilarPlayers", "Player", new { @playerId = Model.ID }))');
+
+        if ('@Model.Position' == 'GK') {
+            $('#keeperPartial').load('@Html.Raw(@Url.Action("GetSummaryKeeper", "Player", new { @playerId = Model.ID }))');
+        }
+        else if (["LB", "RB", "WB"].includes('@Model.Position')) {
+            $('#fullBackPartial').load('@Html.Raw(@Url.Action("GetSummaryFullBack", "Player", new { @playerId = Model.ID }))');
+            $('#summaryRadarSelect').val("fb");
+            $('#tabs-fb').addClass("active show");
+            $('#tabs-fb-tab').addClass("active");
+        }
+        else if ('@Model.Position' == 'CB') {
+            $('#centralDefenderPartial').load('@Html.Raw(@Url.Action("GetSummaryCentreBack", "Player", new { @playerId = Model.ID }))');
+            $('#summaryRadarSelect').val("cd");
+            $('#tabs-cd').addClass("active show");
+            $('#tabs-cd-tab').addClass("active");
+        }
+        else if (["DM", "CM"].includes('@Model.Position')) {
+            $('#centralMidfielderPartial').load('@Html.Raw(@Url.Action("GetSummaryCentreMidfielder", "Player", new { @playerId = Model.ID }))');
+            $('#summaryRadarSelect').val("cm");
+            $('#tabs-cm').addClass("active show");
+            $('#tabs-cm-tab').addClass("active");
+        }
+        else if (["AM", "RW", "LW", "RM", "LM"].includes('@Model.Position')) {
+            $('#attackingMidAndWingerPartial').load('@Html.Raw(@Url.Action("GetSummaryAttackingMidAndWinger", "Player", new { @playerId = Model.ID }))');
+            $('#summaryRadarSelect').val("am-winger");
+            $('#tabs-am-winger').addClass("active show");
+            $('#tabs-am-winger-tab').addClass("active");
+        }
+        else if ('@Model.Position' == 'FW') {
+            $('#strikerPartial').load('@Html.Raw(@Url.Action("GetSummaryStriker", "Player", new { @playerId = Model.ID }))');
+            $('#summaryRadarSelect').val("fw");
+            $('#tabs-fw').addClass("active show");
+            $('#tabs-fw-tab').addClass("active");
+        }
+
+        $('#barsPartial').load('@Html.Raw(@Url.Action("GetSummaryBars", "Player", new { @playerId = Model.ID }))');
+
+        $('[id*="shortlist"').each(function () {
+            let _shortlistId = $(this).prop("id").replace("shortlist", "");
+            $(this).click(function () {
+                if ($(this).prop("checked")) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Player/AddToShortlist",
+                        data: { playerId: @Model.ID, shortlistId: _shortlistId },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            toastr.success('@Model.Name added to shortlist: <a asp-controller="Shortlist" asp-action="View" asp-route-id="' + response.shortlistId + '">' + response.shortlistName + '</a>');
+                        },
+                        error: function (responese) {
+                            toastr.error('Error. Could not add player to shortlist');
+                        }
+                    });
+                }
+                else {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Player/RemoveFromShortlist",
+                        data: { playerIds: @Model.ID, shortlistId: _shortlistId },
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            toastr.success('@Model.Name removed from shortlist: <a asp-controller="Shortlist" asp-action="View" asp-route-id="' + response.shortlistId + '">' + response.shortlistName + '</a>');
+                        },
+                        error: function (responese) {
+                            toastr.error("Error. Could not remove player from shortlist");
+                        }
+                    });
+                }
+            })
+        });
+    });
+
+    $('#summaryRadarSelect').change(function () {
+        let val = $(this).val();
+
+        if (val == "cd") {
+            if (!$('centreBackRadarChart').length) {
+                $('#centralDefenderPartial').load('@Html.Raw(@Url.Action("GetSummaryCentreBack", "Player", new { @playerId = Model.ID }))');
+            }
+        }
+        else if (val == "fb") {
+            if (!$('fullBackRadarChart').length) {
+                $('#fullBackPartial').load('@Html.Raw(@Url.Action("GetSummaryFullBack", "Player", new { @playerId = Model.ID }))');
+            }
+        }
+        else if (val == "cm") {
+            if (!$('centreMidfielderRadarChart').length) {
+                $('#centralMidfielderPartial').load('@Html.Raw(@Url.Action("GetSummaryCentreMidfielder", "Player", new { @playerId = Model.ID }))');
+            }
+        }
+        else if (val == "am-winger") {
+            if (!$('attackingMidAndWingerRadarChart').length) {
+                $('#attackingMidAndWingerPartial').load('@Html.Raw(@Url.Action("GetSummaryAttackingMidAndWinger", "Player", new { @playerId = Model.ID }))');
+            }
+        }
+        else if (val == "fw") {
+            if (!$('strikerRadarChart').length) {
+                $('#strikerPartial').load('@Html.Raw(@Url.Action("GetSummaryStriker", "Player", new { @playerId = Model.ID }))');
+            }
+        }
+        hideCurrentTab();
+        showTab('tabs-' + val);
+    })
+
+    function showTab(id) {
+        $('#' + id).tab('show');
+    }
+
+    function hideCurrentTab() {
+        $('.tab-pane.fade.active.show').removeClass('active').removeClass('show');
+    }
+
+</script>
+
+<style>
+    .list-group-item {
+        padding-top: 0.5em;
+        background-color: rgba(0,0,0,.03);
+    }
+
+    .td-title {
+        font-weight: bolder;
+    }
+
+    .modal.fade.show {
+        padding-right: 0 !important;
+    }
+</style>
