@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AkriStat")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1417ded196327c81e94b19ce416b5665190525c1")]
 [assembly: System.Reflection.AssemblyProductAttribute("AkriStat")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AkriStat")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

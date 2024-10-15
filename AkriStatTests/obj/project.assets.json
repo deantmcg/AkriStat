@@ -11421,11 +11421,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStatTests\\AkriStatTests.csproj",
+      "projectUniqueName": "C:\\code\\repos\\AkriStat\\AkriStatTests\\AkriStatTests.csproj",
       "projectName": "AkriStatTests",
-      "projectPath": "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStatTests\\AkriStatTests.csproj",
+      "projectPath": "C:\\code\\repos\\AkriStat\\AkriStatTests\\AkriStatTests.csproj",
       "packagesPath": "C:\\Users\\deanm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\deanm\\Source\\Workspaces\\AkriStat\\AkriStatTests\\obj\\",
+      "outputPath": "C:\\code\\repos\\AkriStat\\AkriStatTests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\deanm\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -11443,8 +11443,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStat\\AkriStat.csproj": {
-              "projectPath": "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStat\\AkriStat.csproj"
+            "C:\\code\\repos\\AkriStat\\AkriStat\\AkriStat.csproj": {
+              "projectPath": "C:\\code\\repos\\AkriStat\\AkriStat\\AkriStat.csproj"
             }
           }
         }

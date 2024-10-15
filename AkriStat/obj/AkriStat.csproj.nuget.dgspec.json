@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStat\\AkriStat.csproj": {}
+    "C:\\code\\repos\\AkriStat\\AkriStat\\AkriStat.csproj": {}
   },
   "projects": {
-    "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStat\\AkriStat.csproj": {
+    "C:\\code\\repos\\AkriStat\\AkriStat\\AkriStat.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStat\\AkriStat.csproj",
+        "projectUniqueName": "C:\\code\\repos\\AkriStat\\AkriStat\\AkriStat.csproj",
         "projectName": "AkriStat",
-        "projectPath": "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStat\\AkriStat.csproj",
+        "projectPath": "C:\\code\\repos\\AkriStat\\AkriStat\\AkriStat.csproj",
         "packagesPath": "C:\\Users\\deanm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\deanm\\Source\\Workspaces\\AkriStat\\AkriStat\\obj\\",
+        "outputPath": "C:\\code\\repos\\AkriStat\\AkriStat\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\deanm\\AppData\\Roaming\\NuGet\\NuGet.Config",

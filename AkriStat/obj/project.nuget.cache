@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PA4Z3Kigigg=",
+  "dgSpecHash": "4kHorxRl6Nk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\deanm\\source\\Workspaces\\AkriStat\\AkriStat\\AkriStat.csproj",
+  "projectFilePath": "C:\\code\\repos\\AkriStat\\AkriStat\\AkriStat.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\deanm\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\deanm\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.0\\automapper.extensions.microsoft.dependencyinjection.8.1.0.nupkg.sha512",

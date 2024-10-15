@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30611.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkriStat", "AkriStat\AkriStat.csproj", "{52CA894D-3AA0-432F-8E95-C6B29AA9A753}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkriStatTests", "AkriStatTests\AkriStatTests.csproj", "{37706377-DCF0-459E-B7D4-8A985DA659DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkriStatTests", "AkriStatTests\AkriStatTests.csproj", "{37706377-DCF0-459E-B7D4-8A985DA659DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkriStat-2.0.Server", "AkriStat-2.0\AkriStat-2.0.Server\AkriStat-2.0.Server.csproj", "{AABD10D1-5EB7-481B-91E9-CDA10C51466B}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "akristat-2.0.client", "AkriStat-2.0\akristat-2.0.client\akristat-2.0.client.esproj", "{5C70E4C6-CBF2-438D-B19D-10F8F38C988C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AkriStat-2.0", "AkriStat-2.0", "{84265467-0F20-495F-AD19-9D299C6F503C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AkriStat-1.0", "AkriStat-1.0", "{E15BCCFF-53D4-4702-887D-09456ABE6C01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +29,25 @@ Global
 		{37706377-DCF0-459E-B7D4-8A985DA659DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37706377-DCF0-459E-B7D4-8A985DA659DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37706377-DCF0-459E-B7D4-8A985DA659DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABD10D1-5EB7-481B-91E9-CDA10C51466B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABD10D1-5EB7-481B-91E9-CDA10C51466B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABD10D1-5EB7-481B-91E9-CDA10C51466B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABD10D1-5EB7-481B-91E9-CDA10C51466B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C70E4C6-CBF2-438D-B19D-10F8F38C988C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C70E4C6-CBF2-438D-B19D-10F8F38C988C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C70E4C6-CBF2-438D-B19D-10F8F38C988C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5C70E4C6-CBF2-438D-B19D-10F8F38C988C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C70E4C6-CBF2-438D-B19D-10F8F38C988C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C70E4C6-CBF2-438D-B19D-10F8F38C988C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52CA894D-3AA0-432F-8E95-C6B29AA9A753} = {E15BCCFF-53D4-4702-887D-09456ABE6C01}
+		{37706377-DCF0-459E-B7D4-8A985DA659DC} = {E15BCCFF-53D4-4702-887D-09456ABE6C01}
+		{AABD10D1-5EB7-481B-91E9-CDA10C51466B} = {84265467-0F20-495F-AD19-9D299C6F503C}
+		{5C70E4C6-CBF2-438D-B19D-10F8F38C988C} = {84265467-0F20-495F-AD19-9D299C6F503C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1106C753-8068-4224-A0FF-9E5542202586}

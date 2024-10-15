@@ -1,0 +1,6 @@
+@AkriStat_2._0.Server_HostAddress = http://localhost:5257
+
+GET {{AkriStat_2._0.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
