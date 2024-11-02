@@ -1,6 +1,6 @@
-# Ignore build output directories
-.bin/
-.obj/
+# Ignore bin and obj folders
+**/bin/
+**/obj/
 
 # Ignore NuGet and build cache files
 *.nuget.cache
