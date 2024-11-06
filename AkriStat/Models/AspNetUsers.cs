@@ -15,7 +15,6 @@ namespace AkriStat.Models
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
-            ScrapeBatches = new HashSet<ScrapeBatches>();
             Shortlists = new HashSet<Shortlists>();
         }
 
@@ -42,7 +41,6 @@ namespace AkriStat.Models
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
-        public virtual ICollection<ScrapeBatches> ScrapeBatches { get; set; }
         public virtual ICollection<Shortlists> Shortlists { get; set; }
     }
 }

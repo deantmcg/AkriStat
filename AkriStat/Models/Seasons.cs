@@ -13,13 +13,11 @@ namespace AkriStat.Models
         {
             CompetitionSeasonTeams = new HashSet<CompetitionSeasonTeams>();
             Matches = new HashSet<Matches>();
-            ScrapeBatchJobs = new HashSet<ScrapeBatchJobs>();
         }
 
         public string Year { get; set; }
 
         public virtual ICollection<CompetitionSeasonTeams> CompetitionSeasonTeams { get; set; }
         public virtual ICollection<Matches> Matches { get; set; }
-        public virtual ICollection<ScrapeBatchJobs> ScrapeBatchJobs { get; set; }
     }
 }

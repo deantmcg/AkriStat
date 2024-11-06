@@ -12,6 +12,7 @@ namespace AkriStat.Models
         public int PlayerID { get; set; }
         public string PlayerName { get; set; }
         public string Season { get; set; }
+        public int? MinutesPlayed { get; set; }
         public double GkShotsOnTargetFacedPer90 { get; set; }
         public double? ShotsOnTargetFacedPer90Percentile { get; set; }
         public double GkPostShotXGPer90 { get; set; }

@@ -16,7 +16,7 @@
             text: 'Goals vs xG'
         },
         subtitle: {
-            text: '2019-20'
+            text: @Html.Raw(Json.Serialize(AkriStat.Constants.SiteProperties.CurrentSeason))
         },
         legend: {
             layout: 'vertical',

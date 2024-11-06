@@ -199,14 +199,6 @@ namespace AkriStat.Models
         public int? GkCleanSheets { get; set; }
         public decimal? GkPostShotXG { get; set; }
         public double GkPostShotXGPerGame { get; set; }
-        public int? GkPenaltiesFaced { get; set; }
-        public double GkPenaltiesFacedPerGame { get; set; }
-        public int? GkPenaltiesConceded { get; set; }
-        public double GkPenaltiesConcededPerGame { get; set; }
-        public int? GkPenaltiesSaved { get; set; }
-        public double GkPenaltiesSavedPerGame { get; set; }
-        public int? GkPenaltiesFacedMissed { get; set; }
-        public double GkPenaltiesFacedMissedPerGame { get; set; }
         public int? GkPassesCompletedOver40Yards { get; set; }
         public double GkPassesCompletedOver40YardsPerGame { get; set; }
         public int? GkPassesAttemptedOver40Yards { get; set; }

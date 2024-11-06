@@ -157,7 +157,7 @@ namespace AkriStat.Areas.Identity.Pages.Account
         {
             var role = new AspNetUserRoles()
             {
-                RoleId = "CE19C27E-AF7C-4D26-B7D2-B733595B91A6",
+                RoleId = Constants.UserRoles.StandardUserId.ToString(),
                 UserId = user.Id
             };
 

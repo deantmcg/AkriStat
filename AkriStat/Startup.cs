@@ -7,8 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NETCore.MailKit.Extensions;
-using NETCore.MailKit.Infrastructure.Internal;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -33,7 +32,13 @@ namespace AkriStat
 
             services.AddDbContext<AkriStatDbContext>(config =>
             {
-                config.UseSqlServer(Configuration.GetConnectionString("Dev"));
+                config.UseSqlServer(Configuration.GetConnectionString("Dev"), sqlServerOptions =>
+                {
+                    sqlServerOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(30),
+                        errorNumbersToAdd: null);
+                });
             });
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -46,7 +51,7 @@ namespace AkriStat
             //    };
             //});
 
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(Configuration);
 
             services.ConfigureApplicationCookie(options => { options.LoginPath = "/Login"; });
         }

@@ -26,8 +26,8 @@ namespace AkriStat.Models
         public double DribblersTackledPercentage { get; set; }
         public double? DribblersTackledPercentagePercentile { get; set; }
         public double AerialDualsWonPercentage { get; set; }
-        public double? AerialDualsWonPercentagePercentile { get; set; }
+        public double? AerialDualsWonPercentagePerGamePercentile { get; set; }
         public double PassesCompletedPercentage { get; set; }
-        public double? PassesCompletedPercentagePercentile { get; set; }
+        public double? PassesCompletedPercentagePerGamePercentile { get; set; }
     }
 }

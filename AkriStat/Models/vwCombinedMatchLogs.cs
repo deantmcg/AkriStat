@@ -36,6 +36,8 @@ namespace AkriStat.Models
         public int? Shots { get; set; }
         public int? ShotsOnTarget { get; set; }
         public decimal? ShotsOnTargetPercentage { get; set; }
+        public decimal? ShotsPer90Minutes { get; set; }
+        public decimal? ShotsOnTargetPer90Minutes { get; set; }
         public decimal? GoalsPerShot { get; set; }
         public decimal? GoalsPerShotOnTarget { get; set; }
         public int? PenaltyKicksMade { get; set; }

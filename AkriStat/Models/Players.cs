@@ -11,9 +11,7 @@ namespace AkriStat.Models
     {
         public Players()
         {
-            MatchLogImports = new HashSet<MatchLogImports>();
             PlayerMatchLogs = new HashSet<PlayerMatchLogs>();
-            ScrapeBatchJobs = new HashSet<ScrapeBatchJobs>();
             ShortlistedPlayers = new HashSet<ShortlistedPlayers>();
         }
 
@@ -46,9 +44,7 @@ namespace AkriStat.Models
         public virtual Countries Nationality { get; set; }
         public virtual Positions Position { get; set; }
         public virtual Countries SecondNationality { get; set; }
-        public virtual ICollection<MatchLogImports> MatchLogImports { get; set; }
         public virtual ICollection<PlayerMatchLogs> PlayerMatchLogs { get; set; }
-        public virtual ICollection<ScrapeBatchJobs> ScrapeBatchJobs { get; set; }
         public virtual ICollection<ShortlistedPlayers> ShortlistedPlayers { get; set; }
     }
 }

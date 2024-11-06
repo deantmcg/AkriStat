@@ -20,6 +20,8 @@ namespace AkriStat.Models
         public int? Shots { get; set; }
         public int? ShotsOnTarget { get; set; }
         public decimal? ShotsOnTargetPercentage { get; set; }
+        public decimal? ShotsPer90Minutes { get; set; }
+        public decimal? ShotsOnTargetPer90Minutes { get; set; }
         public decimal? GoalsPerShot { get; set; }
         public decimal? GoalsPerShotOnTarget { get; set; }
         public int? PenaltyKicksMade { get; set; }
@@ -150,10 +152,6 @@ namespace AkriStat.Models
         public decimal? GkSavesPercentage { get; set; }
         public bool? GkCleanSheet { get; set; }
         public decimal? GkPostShotXG { get; set; }
-        public int? GkPenaltiesFaced { get; set; }
-        public int? GkPenaltiesConceded { get; set; }
-        public int? GkPenaltiesSaved { get; set; }
-        public int? GkPenaltiesFacedMissed { get; set; }
         public int? GkPassesCompletedOver40Yards { get; set; }
         public int? GkPassesAttemptedOver40Yards { get; set; }
         public decimal? GkPassesCompletedOver40YardsPercentage { get; set; }

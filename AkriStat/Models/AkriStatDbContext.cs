@@ -32,8 +32,6 @@ namespace AkriStat.Models
         public virtual DbSet<Competitions> Competitions { get; set; }
         public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<LeagueTableLines> LeagueTableLines { get; set; }
-        public virtual DbSet<MatchLogImportFiles> MatchLogImportFiles { get; set; }
-        public virtual DbSet<MatchLogImports> MatchLogImports { get; set; }
         public virtual DbSet<MatchTeamStats> MatchTeamStats { get; set; }
         public virtual DbSet<Matches> Matches { get; set; }
         public virtual DbSet<PlayerMatchLogSummaries> PlayerMatchLogSummaries { get; set; }
@@ -41,8 +39,6 @@ namespace AkriStat.Models
         public virtual DbSet<PlayerTeamsHistory> PlayerTeamsHistory { get; set; }
         public virtual DbSet<Players> Players { get; set; }
         public virtual DbSet<Positions> Positions { get; set; }
-        public virtual DbSet<ScrapeBatchJobs> ScrapeBatchJobs { get; set; }
-        public virtual DbSet<ScrapeBatches> ScrapeBatches { get; set; }
         public virtual DbSet<Seasons> Seasons { get; set; }
         public virtual DbSet<ShortlistedPlayers> ShortlistedPlayers { get; set; }
         public virtual DbSet<Shortlists> Shortlists { get; set; }
@@ -121,16 +117,19 @@ namespace AkriStat.Models
 
             modelBuilder.Entity<AspNetUserRoleTeams>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.RoleId, e.TeamId });
+                entity.HasKey(e => new { e.UserId, e.RoleId, e.TeamId })
+                    .HasName("PK__AspNetUs__37355A4A60B296C8");
 
                 entity.HasOne(d => d.Team)
                     .WithMany(p => p.AspNetUserRoleTeams)
                     .HasForeignKey(d => d.TeamId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__AspNetUse__TeamI__5D4BCC77");
 
                 entity.HasOne(d => d.AspNetUserRoles)
                     .WithMany(p => p.AspNetUserRoleTeams)
                     .HasForeignKey(d => new { d.UserId, d.RoleId })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AspNetUserRoleTeams");
             });
 
@@ -160,21 +159,15 @@ namespace AkriStat.Models
             {
                 entity.Property(e => e.Email).HasMaxLength(256);
 
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.FirstName).HasMaxLength(150);
 
-                entity.Property(e => e.FullName)
-                    .IsRequired()
-                    .HasMaxLength(300);
+                entity.Property(e => e.FullName).HasMaxLength(300);
 
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
-                entity.Property(e => e.Surname)
-                    .IsRequired()
-                    .HasMaxLength(150);
+                entity.Property(e => e.Surname).HasMaxLength(150);
 
                 entity.Property(e => e.UserName).HasMaxLength(256);
             });
@@ -182,7 +175,7 @@ namespace AkriStat.Models
             modelBuilder.Entity<CompetitionSeasonTeams>(entity =>
             {
                 entity.HasKey(e => new { e.SeasonYear, e.CompetitionID, e.TeamID })
-                    .HasName("PK__Competit__DBF6FC97B8901C90");
+                    .HasName("PK__Competit__DBF6FC97D865D032");
 
                 entity.Property(e => e.SeasonYear).HasMaxLength(20);
 
@@ -196,7 +189,7 @@ namespace AkriStat.Models
                     .WithMany(p => p.CompetitionSeasonTeams)
                     .HasForeignKey(d => d.SeasonYear)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Competiti__Seaso__7B5B524B");
+                    .HasConstraintName("FK__Competiti__Seaso__3587F3E0");
 
                 entity.HasOne(d => d.Team)
                     .WithMany(p => p.CompetitionSeasonTeams)
@@ -253,36 +246,6 @@ namespace AkriStat.Models
                 entity.Property(e => e.Season).HasMaxLength(20);
             });
 
-            modelBuilder.Entity<MatchLogImportFiles>(entity =>
-            {
-                entity.HasKey(e => e.ImportID)
-                    .HasName("PK__MatchLog__8697678A6C7DB7AA");
-
-                entity.Property(e => e.ImportID).ValueGeneratedNever();
-
-                entity.Property(e => e.Bytes).IsRequired();
-
-                entity.HasOne(d => d.Import)
-                    .WithOne(p => p.MatchLogImportFiles)
-                    .HasForeignKey<MatchLogImportFiles>(d => d.ImportID)
-                    .HasConstraintName("FK__MatchLogI__Impor__5C8CB268");
-            });
-
-            modelBuilder.Entity<MatchLogImports>(entity =>
-            {
-                entity.Property(e => e.DateExecuted).HasColumnType("date");
-
-                entity.Property(e => e.DateScraped)
-                    .HasColumnType("date")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.Player)
-                    .WithMany(p => p.MatchLogImports)
-                    .HasForeignKey(d => d.PlayerID)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__MatchLogI__Playe__30AE302A");
-            });
-
             modelBuilder.Entity<MatchTeamStats>(entity =>
             {
                 entity.HasNoKey();
@@ -293,9 +256,7 @@ namespace AkriStat.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.Season)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                entity.Property(e => e.Season).HasMaxLength(20);
 
                 entity.Property(e => e.TeamOneGkPostShotXG).HasColumnType("decimal(38, 4)");
 
@@ -334,9 +295,7 @@ namespace AkriStat.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.Season)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                entity.Property(e => e.Season).HasMaxLength(20);
 
                 entity.HasOne(d => d.Competition)
                     .WithMany(p => p.Matches)
@@ -352,8 +311,7 @@ namespace AkriStat.Models
                 entity.HasOne(d => d.SeasonNavigation)
                     .WithMany(p => p.Matches)
                     .HasForeignKey(d => d.Season)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Matches__Season__047AA831");
+                    .HasConstraintName("FK__Matches__Season__395884C4");
 
                 entity.HasOne(d => d.TeamOne)
                     .WithMany(p => p.MatchesTeamOne)
@@ -440,73 +398,23 @@ namespace AkriStat.Models
 
                 entity.Property(e => e.DribblersTackledPercentage).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkAverageDistanceFromGoalForDefensiveActions)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkAverageDistanceFromGoalForDefensiveActions).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkAverageYardsPassLength)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkAverageYardsPassLength).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkCleanSheet).HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkCrossesStoppedPercentage).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkCrossesStopped).HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkGoalKickAverageYards).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkCrossesStoppedPercentage)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkGoalKicksLaunchedPercentage).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkDefensiveActionsOutsidePenaltyArea).HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkPassesCompletedOver40YardsPercentage).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkGoalKickAverageYards)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkPassesOver40YardsPercentage).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkGoalKicksAttempted).HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkPostShotXG).HasColumnType("decimal(18, 4)");
 
-                entity.Property(e => e.GkGoalKicksLaunchedPercentage)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkGoalsConceded).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkOpponentCrossesAttempted).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPassesAttempted).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPassesAttemptedOver40Yards).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPassesCompletedOver40Yards).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPassesCompletedOver40YardsPercentage)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPassesOver40YardsPercentage)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPenaltiesConceded).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPenaltiesFaced).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPenaltiesFacedMissed).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPenaltiesSaved).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkPostShotXG)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkSaves).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkSavesPercentage)
-                    .HasColumnType("decimal(18, 4)")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkShotsOnTargetFaced).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.GkThrowsAttempted).HasDefaultValueSql("((0))");
+                entity.Property(e => e.GkSavesPercentage).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.GoalsMinusXG).HasColumnType("decimal(18, 4)");
 
@@ -534,7 +442,11 @@ namespace AkriStat.Models
 
                 entity.Property(e => e.ShortPassesCompletedPercentage).HasColumnType("decimal(18, 4)");
 
+                entity.Property(e => e.ShotsOnTargetPer90Minutes).HasColumnType("decimal(18, 4)");
+
                 entity.Property(e => e.ShotsOnTargetPercentage).HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.ShotsPer90Minutes).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.SuccessfulDribblesPercentage).HasColumnType("decimal(18, 4)");
 
@@ -628,7 +540,7 @@ namespace AkriStat.Models
                 entity.HasOne(d => d.CurrentTeam)
                     .WithMany(p => p.Players)
                     .HasForeignKey(d => d.CurrentTeamID)
-                    .HasConstraintName("FK__Players__Current__10766AC2");
+                    .HasConstraintName("FK__Players__Current__40058253");
 
                 entity.HasOne(d => d.Nationality)
                     .WithMany(p => p.PlayersNationality)
@@ -661,60 +573,10 @@ namespace AkriStat.Models
                     .HasMaxLength(60);
             });
 
-            modelBuilder.Entity<ScrapeBatchJobs>(entity =>
-            {
-                entity.Property(e => e.ErrorMessage).HasMaxLength(1000);
-
-                entity.Property(e => e.QueryFbRefID).HasMaxLength(200);
-
-                entity.Property(e => e.Season)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.HasOne(d => d.Import)
-                    .WithMany(p => p.ScrapeBatchJobs)
-                    .HasForeignKey(d => d.ImportID)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK__ScrapeBat__Impor__0682EC34");
-
-                entity.HasOne(d => d.QueryPlayer)
-                    .WithMany(p => p.ScrapeBatchJobs)
-                    .HasForeignKey(d => d.QueryPlayerID)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK__ScrapeBat__Query__058EC7FB");
-
-                entity.HasOne(d => d.ScrapeBatch)
-                    .WithMany(p => p.ScrapeBatchJobs)
-                    .HasForeignKey(d => d.ScrapeBatchID)
-                    .HasConstraintName("FK__ScrapeBat__Scrap__049AA3C2");
-
-                entity.HasOne(d => d.SeasonNavigation)
-                    .WithMany(p => p.ScrapeBatchJobs)
-                    .HasForeignKey(d => d.Season)
-                    .HasConstraintName("FK__ScrapeBat__Seaso__0777106D");
-            });
-
-            modelBuilder.Entity<ScrapeBatches>(entity =>
-            {
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.CreatedDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.ScrapeBatches)
-                    .HasForeignKey(d => d.CreatedBy)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ScrapeBat__Creat__62458BBE");
-            });
-
             modelBuilder.Entity<Seasons>(entity =>
             {
                 entity.HasKey(e => e.Year)
-                    .HasName("PK__Seasons__D4BD6055C91300B3");
+                    .HasName("PK__Seasons__D4BD60554CCEE93A");
 
                 entity.Property(e => e.Year).HasMaxLength(20);
             });
@@ -722,19 +584,21 @@ namespace AkriStat.Models
             modelBuilder.Entity<ShortlistedPlayers>(entity =>
             {
                 entity.HasKey(e => new { e.ShortlistID, e.PlayerID })
-                    .HasName("PK__Shortlis__C1A8EA3AB7C84604");
+                    .HasName("PK__Shortlis__C1A8EA3A917569B5");
 
                 entity.Property(e => e.DateAdded).HasColumnType("date");
 
                 entity.HasOne(d => d.Player)
                     .WithMany(p => p.ShortlistedPlayers)
                     .HasForeignKey(d => d.PlayerID)
-                    .HasConstraintName("FK__Shortlist__Playe__60924D76");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Shortlist__Playe__2882FE7D");
 
                 entity.HasOne(d => d.Shortlist)
                     .WithMany(p => p.ShortlistedPlayers)
                     .HasForeignKey(d => d.ShortlistID)
-                    .HasConstraintName("FK__Shortlist__Short__5F9E293D");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Shortlist__Short__278EDA44");
             });
 
             modelBuilder.Entity<Shortlists>(entity =>
@@ -754,7 +618,8 @@ namespace AkriStat.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Shortlists)
                     .HasForeignKey(d => d.UserID)
-                    .HasConstraintName("FK__Shortlist__UserI__5CC1BC92");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Shortlist__UserI__22CA2527");
             });
 
             modelBuilder.Entity<TeamMatchLogSummaries>(entity =>
@@ -924,7 +789,11 @@ namespace AkriStat.Models
 
                 entity.Property(e => e.ShortPassesCompletedPercentage).HasColumnType("decimal(18, 4)");
 
+                entity.Property(e => e.ShotsOnTargetPer90Minutes).HasColumnType("decimal(18, 4)");
+
                 entity.Property(e => e.ShotsOnTargetPercentage).HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.ShotsPer90Minutes).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.SuccessfulDribblesPercentage).HasColumnType("decimal(18, 4)");
 
@@ -962,9 +831,7 @@ namespace AkriStat.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.Season)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                entity.Property(e => e.Season).HasMaxLength(20);
 
                 entity.Property(e => e.TeamOneGkPostShotXG).HasColumnType("decimal(38, 4)");
 
