@@ -32,7 +32,8 @@ namespace AkriStat
 
             services.AddDbContext<AkriStatDbContext>(config =>
             {
-                config.UseSqlServer(Configuration.GetConnectionString("Dev"), sqlServerOptions =>
+                //config.UseSqlServer(Configuration.GetConnectionString("Dev"), sqlServerOptions =>
+                config.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionStrings__DEV"), sqlServerOptions =>
                 {
                     sqlServerOptions.EnableRetryOnFailure(
                         maxRetryCount: 5,

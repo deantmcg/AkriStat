@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 [assembly: HostingStartup(typeof(AkriStat.Areas.Identity.IdentityHostingStartup))]
 namespace AkriStat.Areas.Identity
@@ -16,7 +17,8 @@ namespace AkriStat.Areas.Identity
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<AuthDbContext>(options =>
                     options.UseSqlServer(
-                        context.Configuration.GetConnectionString("Dev")));
+                        Environment.GetEnvironmentVariable("ConnectionStrings__DEV")));
+                        //context.Configuration.GetConnectionString("Dev")));
 
                 services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
                 {

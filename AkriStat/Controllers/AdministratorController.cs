@@ -159,7 +159,8 @@ namespace AkriStat.Controllers
         public async Task<IActionResult> UpdatePlayerMatchLogSummaries()
         {
             // Get the database connection string
-            var conString = _configuration.GetConnectionString("DEV");
+            var conString = Environment.GetEnvironmentVariable("ConnectionStrings__DEV");
+            //var conString = _configuration.GetConnectionString("DEV");
 
             using (SqlConnection conn = new SqlConnection(conString))
             {
@@ -183,7 +184,8 @@ namespace AkriStat.Controllers
         public async Task<IActionResult> UpdateTeamMatchLogSummaries()
         {
             // Get the database connection string
-            var conString = _configuration.GetConnectionString("DEV");
+            var conString = Environment.GetEnvironmentVariable("ConnectionStrings__DEV");
+            //var conString = _configuration.GetConnectionString("DEV");
 
             using (SqlConnection conn = new SqlConnection(conString))
             {
