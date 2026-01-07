@@ -158,24 +158,8 @@ namespace AkriStat.Controllers
         [HttpGet, Route("Admin/UpdatePlayerMatchLogSummaries")]
         public async Task<IActionResult> UpdatePlayerMatchLogSummaries()
         {
-            // Get the database connection string
-            var conString = Environment.GetEnvironmentVariable("ConnectionStrings__DEV");
-            //var conString = _configuration.GetConnectionString("DEV");
-
-            using (SqlConnection conn = new SqlConnection(conString))
-            {
-                // Set stored procedure name
-                string storedProcedureName = "[dbo].[update_player_matchlog_summaries]";
-
-                // Create SQL command
-                SqlCommand command = new SqlCommand(storedProcedureName, conn);
-
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.CommandTimeout = (int)TimeSpan.FromMinutes(10).TotalSeconds;
-                conn.Open();
-                var result = command.ExecuteNonQuery();
-                conn.Close();
-            }
+            var storedProcedureName = "[dbo].[update_player_matchlog_summaries]";
+            ExecuteStoredProcedure(storedProcedureName);
 
             return Ok();
         }
@@ -183,24 +167,8 @@ namespace AkriStat.Controllers
         [HttpGet, Route("Admin/UpdateTeamMatchLogSummaries")]
         public async Task<IActionResult> UpdateTeamMatchLogSummaries()
         {
-            // Get the database connection string
-            var conString = Environment.GetEnvironmentVariable("ConnectionStrings__DEV");
-            //var conString = _configuration.GetConnectionString("DEV");
-
-            using (SqlConnection conn = new SqlConnection(conString))
-            {
-                // Set stored procedure name
-                string storedProcedureName = "[dbo].[update_team_matchlog_summaries]";
-
-                // Create SQL command
-                SqlCommand command = new SqlCommand(storedProcedureName, conn);
-
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.CommandTimeout = (int)TimeSpan.FromMinutes(10).TotalSeconds;
-                conn.Open();
-                var result = command.ExecuteNonQuery();
-                conn.Close();
-            }
+            var storedProcedureName = "[dbo].[update_team_matchlog_summaries]";
+            ExecuteStoredProcedure(storedProcedureName);
 
             return Ok();
         }
@@ -251,6 +219,25 @@ namespace AkriStat.Controllers
                 return true;
             else
                 return false;
+        }
+
+        private static void ExecuteStoredProcedure(string storedProcedureName)
+        {
+            // Get the database connection string
+            var conString = Environment.GetEnvironmentVariable("ConnectionStrings__DEV");
+            //var conString = _configuration.GetConnectionString("DEV");
+
+            using (SqlConnection conn = new SqlConnection(conString))
+            {
+                // Create SQL command
+                SqlCommand command = new SqlCommand(storedProcedureName, conn);
+
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandTimeout = (int)TimeSpan.FromMinutes(10).TotalSeconds;
+                conn.Open();
+                var result = command.ExecuteNonQuery();
+                conn.Close();
+            }
         }
         #endregion
     }
