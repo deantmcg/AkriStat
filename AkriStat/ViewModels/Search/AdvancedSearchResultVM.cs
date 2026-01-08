@@ -1,4 +1,5 @@
-﻿using AkriStat.Helpers;
+﻿using AkriStat.Constants;
+using AkriStat.Helpers;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,10 +26,9 @@ namespace AkriStat.ViewModels.Search
         {
             get
             {
-                if (Value == null)
-                    return "?";
-                Formatter formatter = new Formatter();
-                return formatter.GetCurrencyString(Value.Value);
+                return Value.HasValue
+                    ? Formatter.GetCurrencyString(Value.Value)
+                    : Messages.SingleDash;
             }
         }
         [Display(Name = "Weekly Wage"), DisplayFormat(DataFormatString = "{0:C0}", NullDisplayText = "?")]

@@ -33,8 +33,7 @@ namespace AkriStat.ViewModels.Team
         { 
             get 
             {
-                var formatter = new Formatter();
-                return formatter.GetCurrencyString(TotalValue);
+                return Formatter.GetCurrencyString(TotalValue);
             } 
         }
         public List<AdvancedSearchResultVM> PlayerSummaries { get; set; }

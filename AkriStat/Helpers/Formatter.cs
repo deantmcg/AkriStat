@@ -2,11 +2,11 @@
 
 namespace AkriStat.Helpers
 {
-    public class Formatter
+    public static class Formatter
     {
         /* Converts money decimal to user-friendly currency string
            e.g. 35000000 > £35m */
-        public string GetCurrencyString (decimal value)
+        public static string GetCurrencyString (decimal value)
         {
             if (value == 0)
                 return "-";
@@ -35,7 +35,7 @@ namespace AkriStat.Helpers
             return String.Format("£{0:#,,,.##}B", value - 5000000);
         }
 
-        public string GetCurrencyString(double value)
+        public static string GetCurrencyString(double value)
         {
             return GetCurrencyString(Convert.ToDecimal(value));
         }

@@ -184,7 +184,7 @@ namespace AkriStat.Controllers
             }
 
             var query = new Query(focus + "MatchLogSummaries")
-                .Where("Season", Constants.SiteProperties.CurrentSeason)
+                .Where("Season", SiteProperties.CurrentSeason)
                 .Where("MinutesPlayed", ">", 850)
                 .Where(metric, ">", "0")
                 .Take(10);
@@ -258,7 +258,7 @@ namespace AkriStat.Controllers
         {
             // Get league table lines for league ID
             var leagueTableLines = await _context.LeagueTableLines
-                .Where(x => x.Season.Equals(Constants.SiteProperties.CurrentSeason)
+                .Where(x => x.Season.Equals(SiteProperties.CurrentSeason)
                             && x.LeagueID == id)
                 .OrderByDescending(x => x.Points)
                 .ThenByDescending(x => x.GoalDifference)

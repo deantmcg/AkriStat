@@ -16,8 +16,7 @@ namespace AkriStat.ViewModels.Shortlist
         { 
             get
             {
-                Formatter formatter = new Formatter();
-                return formatter.GetCurrencyString(Value);
+                return Formatter.GetCurrencyString(Value);
             }
         }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
@@ -27,10 +26,7 @@ namespace AkriStat.ViewModels.Shortlist
         {
             get
             {
-                //DateTime dtNow = new DateTime(2020, 7, 1);
                 int years = new DateTime(DateTime.Now.Subtract(DateOfBirth).Ticks).Year - 1;
-                DateTime dobDateNow = DateOfBirth.AddYears(years);
-
                 return years;
             }
         }

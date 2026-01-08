@@ -1,4 +1,5 @@
-﻿using AkriStat.Helpers;
+﻿using AkriStat.Constants;
+using AkriStat.Helpers;
 using AkriStat.Models;
 using System;
 using System.Collections.Generic;
@@ -112,8 +113,9 @@ namespace AkriStat.ViewModels.Player
         { 
             get
             {
-                var formatter = new Formatter();
-                return formatter.GetCurrencyString(Value.Value);
+                return Value.HasValue
+                    ? Formatter.GetCurrencyString(Value.Value)
+                    : Messages.SingleDash;
             }
         }
 
@@ -124,8 +126,9 @@ namespace AkriStat.ViewModels.Player
         {
             get
             {
-                var formatter = new Formatter();
-                return formatter.GetCurrencyString(WeeklyWage.Value);
+                return WeeklyWage.HasValue
+                    ? Formatter.GetCurrencyString(WeeklyWage.Value)
+                    : Messages.SingleDash;
             }
         }
 
