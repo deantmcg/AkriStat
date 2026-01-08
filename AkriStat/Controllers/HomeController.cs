@@ -94,8 +94,6 @@ namespace AkriStat.Controllers
                 })
                 .ToListAsync();
 
-            ViewBag.CurrentSeason = SiteProperties.CurrentSeason;
-
             return View();
         }
 
