@@ -3,11 +3,11 @@ using System.Text;
 
 namespace AkriStat.Helpers
 {
-    public class Normalizer
+    public static class Normalizer
     {
         /* Converts accented characters to standard
            e.g. Ødegaard > Odegaard */
-        public string NormalizeString(string text)
+        public static string NormalizeString(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;

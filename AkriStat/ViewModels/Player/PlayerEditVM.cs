@@ -19,8 +19,7 @@ namespace AkriStat.ViewModels.Player
         { 
             get 
             {
-                var normalizer = new Normalizer();
-                return normalizer.NormalizeString(Name);
+                return Normalizer.NormalizeString(Name);
             } 
         }
 
@@ -30,8 +29,7 @@ namespace AkriStat.ViewModels.Player
         { 
             get 
             { 
-                var normalizer = new Normalizer(); 
-                return normalizer.NormalizeString(FullName); 
+                return Normalizer.NormalizeString(FullName); 
             } 
         }
 

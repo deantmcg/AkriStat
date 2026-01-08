@@ -31,9 +31,8 @@ namespace AkriStat.Controllers
                 return View(vm);
             }
 
-            var normalizer = new Normalizer();
             // Converts accented characters in query to standard characters
-            var query = normalizer.NormalizeString(vm.Query).ToUpper();
+            var query = Normalizer.NormalizeString(vm.Query).ToUpper();
             var viewModels = new List<StandardSearchResultVM>();
 
             // Get players whose name contains query

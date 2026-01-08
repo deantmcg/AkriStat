@@ -16,8 +16,7 @@ namespace AkriStat.ViewModels.Team
         {
             get
             {
-                var normalizer = new Normalizer();
-                return normalizer.NormalizeString(Name);
+                return Normalizer.NormalizeString(Name);
             }
         }
         [Display(Name = "Full Name")]
@@ -26,8 +25,7 @@ namespace AkriStat.ViewModels.Team
         {
             get
             {
-                var normalizer = new Normalizer();
-                return normalizer.NormalizeString(FullName);
+                return Normalizer.NormalizeString(FullName);
             }
         }
         [Display(Name = "Year Founded")]
