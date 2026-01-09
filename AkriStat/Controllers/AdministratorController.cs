@@ -92,7 +92,7 @@ namespace AkriStat.Controllers
 
             /* Checks if User role has been changed
                Clears Role collection and re-populates */
-            if (user.AspNetUserRoles.Count() > 0 && !user.AspNetUserRoles.First().RoleId.Equals(vm.RoleId))
+            if (user.AspNetUserRoles.Count > 0 && !user.AspNetUserRoles.First().RoleId.Equals(vm.RoleId))
             {
                 user.AspNetUserRoles.Clear();
                 user.AspNetUserRoles.Add(new AspNetUserRoles()
@@ -106,7 +106,7 @@ namespace AkriStat.Controllers
             if (UserCanHaveTeam(vm.RoleId))
             {
                 // If team exists but it has been removed
-                if (user.AspNetUserRoles.First().AspNetUserRoleTeams.Count() > 0 && !vm.TeamId.HasValue)
+                if (user.AspNetUserRoles.First().AspNetUserRoleTeams.Count > 0 && !vm.TeamId.HasValue)
                 {
                     user.AspNetUserRoles.First().AspNetUserRoleTeams.Clear();
                 }
@@ -121,7 +121,7 @@ namespace AkriStat.Controllers
                     });
                 }
                 // If team is null and a new one has been selected
-                else if (vm.TeamId.HasValue && user.AspNetUserRoles.First().AspNetUserRoleTeams.Count() == 0)
+                else if (vm.TeamId.HasValue && user.AspNetUserRoles.First().AspNetUserRoleTeams.Count == 0)
                 {
                     user.AspNetUserRoles.First().AspNetUserRoleTeams.Add(new AspNetUserRoleTeams
                     {
@@ -133,7 +133,7 @@ namespace AkriStat.Controllers
             else
             {
                 // If user has team - remove it
-                if (user.AspNetUserRoles.First().AspNetUserRoleTeams.Count() > 0)
+                if (user.AspNetUserRoles.First().AspNetUserRoleTeams.Count > 0)
                 {
                     user.AspNetUserRoles.First().AspNetUserRoleTeams.Clear();
                 }

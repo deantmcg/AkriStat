@@ -10,7 +10,6 @@ namespace AkriStat.Constants
         {
             get
             {
-                var currentMonth = DateTime.Now.Month;
                 var minusYears = DateTime.Now.Year - 2019;
                 var adjustedDate = DateTime.Now.AddYears(-minusYears);
 

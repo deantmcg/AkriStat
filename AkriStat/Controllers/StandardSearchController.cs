@@ -68,12 +68,12 @@ namespace AkriStat.Controllers
                 .ToList();
 
             // If 1 player found and 0 teams - navigate to that player
-            if (vm.Players.Count() == 1 && vm.Teams.Count() == 0)
+            if (vm.Players.Count == 1 && vm.Teams.Count == 0)
             {
                 return RedirectToAction("Details", "Player", new { id = vm.Players.First().ID });
             }
             // If 1 team found and 0 players - navigate to that team
-            if (vm.Teams.Count() == 1 && vm.Players.Count() == 0)
+            if (vm.Teams.Count == 1 && vm.Players.Count == 0)
             {
                 return RedirectToAction("Details", "Team", new { id = vm.Teams.First().ID });
             }
