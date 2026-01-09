@@ -87,18 +87,14 @@ namespace AkriStat.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-
-            TeamsSelectList = _context.Teams
-                .OrderBy(x => x.Name)
-                .Select(x => new SelectListItem() { Value = x.ID.ToString(), Text = x.Name })
-                .ToList();
-
+            GetTeamSelectList();
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+            GetTeamSelectList();
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -147,6 +143,14 @@ namespace AkriStat.Areas.Identity.Pages.Account
 
             // Only reached if there was a failure
             return Page();
+        }
+
+        private void GetTeamSelectList()
+        {
+            TeamsSelectList = _context.Teams
+                            .OrderBy(x => x.Name)
+                            .Select(x => new SelectListItem() { Value = x.ID.ToString(), Text = x.Name })
+                            .ToList();
         }
 
         /*
