@@ -270,7 +270,7 @@ namespace AkriStat.Controllers
         #region Helper Methods
         private int GetFavouriteTeamId()
         {
-            return Convert.ToInt32(User.Identities.First().Claims.FirstOrDefault(x => x.Type.Equals("favouriteteam")).Value);
+            return Convert.ToInt32(User.Identities.First().Claims.FirstOrDefault(x => x.Type.Equals(ASClaimTypes.FavouriteTeam)).Value);
         }
         #endregion
     }

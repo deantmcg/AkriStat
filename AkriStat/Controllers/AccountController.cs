@@ -1,4 +1,5 @@
-﻿using AkriStat.Models;
+﻿using AkriStat.Constants;
+using AkriStat.Models;
 using AkriStat.ViewModels.Account;
 using AkriStat.ViewModels.Administrator;
 using AkriStat.ViewModels.Shortlist;
@@ -270,14 +271,14 @@ namespace AkriStat.Controllers
         // Updates user favouriteteam claim
         private void SetFavouriteTeam(AspNetUsers user, int teamId)
         {
-            user.AspNetUserClaims.FirstOrDefault(x => x.ClaimType.Equals(Constants.ASClaimTypes.FavouriteTeam))
+            user.AspNetUserClaims.FirstOrDefault(x => x.ClaimType.Equals(ASClaimTypes.FavouriteTeam))
                 .ClaimValue = teamId.ToString();
         }
 
         // Gets value of user's favouriteteam claim
         private int GetFavouriteTeamId()
         {
-            return Convert.ToInt32(User.Identities.First().Claims.FirstOrDefault(x => x.Type.Equals("favouriteteam")).Value);
+            return Convert.ToInt32(User.Identities.First().Claims.FirstOrDefault(x => x.Type.Equals(ASClaimTypes.FavouriteTeam)).Value);
         }
         #endregion
     }

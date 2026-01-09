@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using AkriStat.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using AkriStat.Constants;
 
 namespace AkriStat.Areas.Identity.Pages.Account
 {
@@ -201,14 +202,14 @@ namespace AkriStat.Areas.Identity.Pages.Account
 
             var fullNameClaim = new AspNetUserClaims()
             {
-                ClaimType = "fullname",
+                ClaimType = ASClaimTypes.FullName,
                 ClaimValue = user.FullName,
                 UserId = user.Id
             };
 
             var favouriteTeamClaim = new AspNetUserClaims()
             {
-                ClaimType = "favouriteteam",
+                ClaimType = ASClaimTypes.FavouriteTeam,
                 ClaimValue = favouriteTeamId.ToString(),
                 UserId = user.Id
             };

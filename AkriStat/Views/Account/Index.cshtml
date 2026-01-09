@@ -1,6 +1,6 @@
 ﻿<div class="row" style="padding-bottom:10px">
     <div class="col-12">
-        <h1 style="text-align:center"><b>@User.Identities.First().Claims.FirstOrDefault(x => x.Type.Equals("fullname")).Value</b></h1>
+        <h1 style="text-align:center"><b>@User.Identities.First().Claims.FirstOrDefault(x => x.Type.Equals(AkriStat.Constants.ASClaimTypes.FullName)).Value</b></h1>
     </div>
 </div>
 <div class="row">
