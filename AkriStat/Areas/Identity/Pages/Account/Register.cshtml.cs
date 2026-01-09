@@ -148,9 +148,9 @@ namespace AkriStat.Areas.Identity.Pages.Account
         private void GetTeamSelectList()
         {
             TeamsSelectList = _context.Teams
-                            .OrderBy(x => x.Name)
-                            .Select(x => new SelectListItem() { Value = x.ID.ToString(), Text = x.Name })
-                            .ToList();
+                .OrderBy(x => x.Name)
+                .Select(x => new SelectListItem() { Value = x.ID.ToString(), Text = x.Name })
+                .ToList();
         }
 
         /*
