@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using AkriStat.Constants;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,7 +8,7 @@ namespace AkriStat.ViewModels.Scrape
     public class ScrapeDetailsVM
     {
         [Required]
-        public string Season { get; set; } = Constants.SiteProperties.CurrentSeason;
+        public string Season { get; set; } = SiteProperties.CurrentSeason;
 
         [Display(Name = "New Players (FbRef IDs)")]
         public string FbRefIds { get; set; }

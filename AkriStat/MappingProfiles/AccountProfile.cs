@@ -1,4 +1,5 @@
-﻿using AkriStat.Models;
+﻿using AkriStat.Constants;
+using AkriStat.Models;
 using AkriStat.ViewModels.Account;
 using System.Linq;
 
@@ -10,7 +11,7 @@ namespace AkriStat.MappingProfiles
         {
             CreateMap<AspNetUsers, AccountDetailsVM>()
                 .ForMember(dest => dest.FavouriteTeamId, opt => opt.MapFrom(src => 
-                    src.AspNetUserClaims.FirstOrDefault(x => x.ClaimType.Equals(Constants.ASClaimTypes.FavouriteTeam)).ClaimValue));
+                    src.AspNetUserClaims.FirstOrDefault(x => x.ClaimType.Equals(ASClaimTypes.FavouriteTeam)).ClaimValue));
 
             CreateMap<AccountDetailsVM, AspNetUsers>();
         }

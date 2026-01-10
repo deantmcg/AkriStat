@@ -1,4 +1,5 @@
 ﻿using AkriStat.Areas.Identity.Data;
+using AkriStat.Constants;
 using AkriStat.Helpers;
 using AkriStat.Models;
 using AkriStat.ViewModels.Search;
@@ -122,12 +123,12 @@ namespace AkriStat.Controllers
                 .Include(x => x.CompetitionSeasonTeams)
                 .FirstOrDefault(x => x.ID == teamId)
                 .CompetitionSeasonTeams
-                .FirstOrDefault(x => x.SeasonYear.Equals(Constants.SiteProperties.CurrentSeason))
+                .FirstOrDefault(x => x.SeasonYear.Equals(SiteProperties.CurrentSeason))
                 .CompetitionID;
 
             // Get league table lines for league ID
             var leagueTableLines = await _context.LeagueTableLines
-                .Where(x => x.Season.Equals(Constants.SiteProperties.CurrentSeason)
+                .Where(x => x.Season.Equals(SiteProperties.CurrentSeason)
                             && x.LeagueID == currentLeagueID)
                 .OrderByDescending(x => x.Points)
                 .ThenByDescending(x => x.GoalDifference)
@@ -156,7 +157,7 @@ namespace AkriStat.Controllers
 
             // Get player stat summaries for squad
             var playerSummaries = await _context.vwSummariesAdvancedSearch
-                .Where(x => x.Season.Equals(Constants.SiteProperties.CurrentSeason)
+                .Where(x => x.Season.Equals(SiteProperties.CurrentSeason)
                             && playerIds.Contains(x.ID.Value))
                 .ToListAsync();
 
@@ -174,7 +175,7 @@ namespace AkriStat.Controllers
             // Get matches played for team ID
             var matchTeamStats = await _context.MatchTeamStats
                 .Where(x => (x.TeamOneID == teamId || x.TeamTwoID == teamId)
-                            && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                            && x.Season.Equals(SiteProperties.CurrentSeason))
                 .OrderBy(x => x.Date)
                 .ToListAsync();
 
@@ -189,7 +190,7 @@ namespace AkriStat.Controllers
         {
             var matchTeamStats = await _context.MatchTeamStats
                 .Where(x => (x.TeamOneID == teamId || x.TeamTwoID == teamId)
-                            && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                            && x.Season.Equals(SiteProperties.CurrentSeason))
                 .OrderBy(x => x.Date)
                 .Select(x => new GoalsVsXgVM()
                 {
@@ -236,7 +237,7 @@ namespace AkriStat.Controllers
 
             var viewModels = await _context.vwPlayerCarries
                 .Where(x => playerIds.Contains(x.PlayerID) &&
-                            x.Season == Constants.SiteProperties.CurrentSeason &&
+                            x.Season == SiteProperties.CurrentSeason &&
                             x.MinutesPlayed > minimumMinutesPlayed)
                 .Select(x => new PlayerCarriesVM()
                 {
@@ -247,7 +248,7 @@ namespace AkriStat.Controllers
                 })
                 .ToListAsync();
 
-            ViewBag.CurrentSeason = Constants.SiteProperties.CurrentSeason;
+            ViewBag.CurrentSeason = SiteProperties.CurrentSeason;
             ViewBag.MinimumMinutesPlayed = minimumMinutesPlayed;
 
             return PartialView("_CarriesGraph", viewModels);

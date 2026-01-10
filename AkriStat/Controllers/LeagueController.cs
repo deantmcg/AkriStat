@@ -1,4 +1,5 @@
-﻿using AkriStat.Models;
+﻿using AkriStat.Constants;
+using AkriStat.Models;
 using AkriStat.ViewModels.League;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +58,7 @@ namespace AkriStat.Controllers
 
             // Gets all leagues matchweeks for current season
             vm.Matchweeks = _context.Matches
-                .Where(x => x.CompetitionID == id && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                .Where(x => x.CompetitionID == id && x.Season.Equals(SiteProperties.CurrentSeason))
                 .Select(x => new SelectListItem() { Text = x.Round })
                 .Distinct()
                 .OrderBy(x => Convert.ToInt32(x.Text.Replace("Matchweek ", "")))

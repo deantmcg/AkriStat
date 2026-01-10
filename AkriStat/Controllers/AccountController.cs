@@ -65,7 +65,7 @@ namespace AkriStat.Controllers
             if (!user.FullName.Equals(viewModel.FullName))
             {
                 // Update fullname claim
-                user.AspNetUserClaims.FirstOrDefault(x => x.ClaimType.Equals(Constants.ASClaimTypes.FullName))
+                user.AspNetUserClaims.FirstOrDefault(x => x.ClaimType.Equals(ASClaimTypes.FullName))
                     .ClaimValue = viewModel.FullName;
             }
 

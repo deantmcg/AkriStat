@@ -165,7 +165,7 @@ namespace AkriStat.Controllers
                 viewModel.MatchLogs = _mapper.Map<List<PlayerMatchLogVM>>
                 (
                     await _context.vwCombinedMatchLogs
-                        .Where(x => x.PlayerID == playerId && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                        .Where(x => x.PlayerID == playerId && x.Season.Equals(SiteProperties.CurrentSeason))
                         .OrderBy(x => x.Date.Value)
                         .ToListAsync()
                 );
@@ -179,7 +179,7 @@ namespace AkriStat.Controllers
                 var matchLogs = _mapper.Map<List<PlayerMatchLogVM>>
                 (
                     await _context.vwCombinedMatchLogs
-                        .Where(x => x.PlayerID == playerId && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                        .Where(x => x.PlayerID == playerId && x.Season.Equals(SiteProperties.CurrentSeason))
                         .OrderBy(x => x.Date.Value)
                         .ToListAsync()
                 );
@@ -542,7 +542,7 @@ namespace AkriStat.Controllers
             var viewModels = await _context.PlayerMatchLogSummaries
                 .Where(x => x.MinutesPlayed > minutesPlayed
                             && x.GoalsPer90 > 0
-                            && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                            && x.Season.Equals(SiteProperties.CurrentSeason))
                 .OrderByDescending(x => x.Goals)
                 .Take(30)
                 .Select(x => new PlayerAttackingVM()
@@ -577,7 +577,7 @@ namespace AkriStat.Controllers
             var viewModels = await _context.PlayerMatchLogSummaries
                 .Where(x => x.MinutesPlayed > minutesPlayed
                             && x.GoalsPer90 > 0
-                            && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                            && x.Season.Equals(SiteProperties.CurrentSeason))
                 .OrderByDescending(x => x.Assists)
                 .Take(30)
                 .Select(x => new PlayerPassingVM()
@@ -604,7 +604,7 @@ namespace AkriStat.Controllers
             var viewModels = await _context.PlayerMatchLogSummaries
                 .Where(x => x.MinutesPlayed > minutesPlayed
                             && x.SuccessfulDribblesPercentage > 0
-                            && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                            && x.Season.Equals(SiteProperties.CurrentSeason))
                 .OrderByDescending(x => x.Assists)
                 .Take(30)
                 .Select(x => new PlayerPossessionVM()
@@ -629,7 +629,7 @@ namespace AkriStat.Controllers
             var viewModels = await _context.PlayerMatchLogSummaries
                 .Where(x => x.MinutesPlayed > minutesPlayed
                             && x.SuccessfulDribblesPercentage > 0
-                            && x.Season.Equals(Constants.SiteProperties.CurrentSeason))
+                            && x.Season.Equals(SiteProperties.CurrentSeason))
                 .OrderByDescending(x => x.Assists)
                 .Take(30)
                 .Select(x => new PlayerDefensiveVM()

@@ -1,4 +1,5 @@
-﻿using AkriStat.Models;
+﻿using AkriStat.Constants;
+using AkriStat.Models;
 using AkriStat.ViewModels.Team;
 using AkriStat.ViewModels.Team.Summary;
 using System.Linq;
@@ -13,11 +14,11 @@ namespace AkriStat.MappingProfiles
                 .ForMember(dest => dest.NationName, opt => opt.MapFrom(src => src.Nation.Name))
                 .ForMember(dest => dest.NationFlagUrl, opt => opt.MapFrom(src => src.Nation.FlagUrl))
                 .ForMember(dest => dest.CurrentLeagueID, opt => opt.MapFrom(src => src.CompetitionSeasonTeams
-                                                                                      .Where(x => x.SeasonYear.Equals(Constants.SiteProperties.CurrentSeason)
+                                                                                      .Where(x => x.SeasonYear.Equals(SiteProperties.CurrentSeason)
                                                                                              && x.Competition.CompetitionTypeID == 1)
                                                                                       .First().CompetitionID))
                 .ForMember(dest => dest.CurrentLeagueName, opt => opt.MapFrom(src => src.CompetitionSeasonTeams
-                                                                                      .Where(x => x.SeasonYear.Equals(Constants.SiteProperties.CurrentSeason)
+                                                                                      .Where(x => x.SeasonYear.Equals(SiteProperties.CurrentSeason)
                                                                                              && x.Competition.CompetitionTypeID == 1)
                                                                                       .First().Competition.Name))
                 /*.ForMember(dest => dest.Players, opt => opt.MapFrom(src => src.Players.ToList()))*/
